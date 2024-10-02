@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  g3types.h                                                             */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef G3TYPES_H
+#define G3TYPES_H
 
 /*
  * [RMS] this file defines and/or pre-declares many core types for the geometry3 library
@@ -153,7 +184,7 @@ typedef std::shared_ptr<ProgressCancel> ProgressCancelPtr;
 #include <SpatialQueryTypes.h>
 
 // [RMS] why is this here? doesn't seem like a good idea...
-//#include <Frame3.h>
+// #include <Frame3.h>
 
 std::ostream &operator<<(std::ostream &os, const g3::Vector2f &v);
 std::ostream &operator<<(std::ostream &os, const g3::Vector2d &v);
@@ -169,3 +200,5 @@ std::ostream &operator<<(std::ostream &os, const g3::AxisAlignedBox2f &b);
 std::ostream &operator<<(std::ostream &os, const g3::AxisAlignedBox2d &b);
 std::ostream &operator<<(std::ostream &os, const g3::AxisAlignedBox3f &b);
 std::ostream &operator<<(std::ostream &os, const g3::AxisAlignedBox3d &b);
+
+#endif // G3TYPES_H

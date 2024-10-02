@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  string_util.h                                                         */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef STRING_UTIL_H
+#define STRING_UTIL_H
 
 #include <algorithm>
 #include <regex>
@@ -45,27 +76,27 @@ public:
 	template <typename First, typename... Args>
 	static std::string Format(const char *formatting, const First &first, const Args &...args) {
 		/* Match exactly one opening brace, one or more numeric digit,
-		* then exactly one closing brace, identifying a token
-		* Ex: {0} will match, {-1} will not */
+		 * then exactly one closing brace, identifying a token
+		 * Ex: {0} will match, {-1} will not */
 		static const std::regex targetRegex{ "\\{[0-9]+\\}" };
 		std::smatch match;
 
 		/* Copy the formatting string to a std::string, to
-		* make for easier processing, which will eventually
-		* be used (the .c_str() method) to pass the remainder
-		* of the formatting recursively */
+		 * make for easier processing, which will eventually
+		 * be used (the .c_str() method) to pass the remainder
+		 * of the formatting recursively */
 		std::string returnString{ formatting };
 
 		/* Copy the formatting string to another std::string, which
-		* will get modified in the regex matching loop, to remove the
-		* current match from the string and find the next match */
+		 * will get modified in the regex matching loop, to remove the
+		 * current match from the string and find the next match */
 		std::string copyString{ formatting };
 
 		/* std::tuple to hold the current smallest valued brace token,
-		* wrapped in a std::vector because there can be multiple brace
-		* tokens with the same value. For example, in the following format string:
-		* "There were {0} books found matching the title {1}, {0}/{2}",
-		* this pass will save the locations of the first and second {0} */
+		 * wrapped in a std::vector because there can be multiple brace
+		 * tokens with the same value. For example, in the following format string:
+		 * "There were {0} books found matching the title {1}, {0}/{2}",
+		 * this pass will save the locations of the first and second {0} */
 		using TokenInformation = std::tuple<int, size_t, size_t>;
 		std::vector<TokenInformation> smallestValueInformation{ std::make_tuple(-1, 0, 0) };
 
@@ -79,8 +110,8 @@ public:
 				regexMatchNumericValue = std::stoi(returnString.substr(foundPosition + 1, (foundPosition + match.str().length())));
 			} catch (std::exception &e) {
 				/*The value between the braces was not an integer value, so throw an
-				* exception. Is this check actually necessary? I am not familiar enough with
-				* regex to know whether it is even possible to have a non-numeric value picked up */
+				 * exception. Is this check actually necessary? I am not familiar enough with
+				 * regex to know whether it is even possible to have a non-numeric value picked up */
 				throw std::runtime_error(Format("ERROR: In Format() - Formatted string contains non-numeric token(formatting = {0}, ex = {1})", formatting, e.what()));
 			}
 			/*Do not allow negative numbers, although this should never get picked up the regex anyway*/
@@ -88,9 +119,9 @@ public:
 				throw std::runtime_error(Format("ERROR: In Format() - Formatted string is invalid (formatting = {0})", formatting));
 			}
 			/* If the numeric value in the curly brace token is smaller than
-			* the current smallest (or if the smallest value has not yet been set,
-			* ie it is the first match), set the corresponding smallestX variables
-			* and wrap them up into a TokenInformation and add it to the std::vector */
+			 * the current smallest (or if the smallest value has not yet been set,
+			 * ie it is the first match), set the corresponding smallestX variables
+			 * and wrap them up into a TokenInformation and add it to the std::vector */
 			int smallestValue{ std::get<0>(smallestValueInformation.at(0)) };
 			if ((smallestValue == -1) || (regexMatchNumericValue < smallestValue)) {
 				smallestValueInformation.clear();
@@ -103,20 +134,20 @@ public:
 						match.str().length()));
 			}
 			/*Set the copy string to just past the match token, so we don't accidentally
-			* match it again on the next iteration */
+			 * match it again on the next iteration */
 			copyString = match.suffix();
 		}
 		int smallestValue{ std::get<0>(smallestValueInformation.at(0)) };
 		/*If the smallest value is still the initialized value of -1, no other value was
-		*found. This is also checking whether not we found ANY tokens (the smallestValueInformation
-		*will receive whatever the first match is by default) */
+		 *found. This is also checking whether not we found ANY tokens (the smallestValueInformation
+		 *will receive whatever the first match is by default) */
 		if (smallestValue == -1) {
 			throw std::runtime_error(Format("ERROR: In Format() - Formatted string is invalid (formatting = {0})", formatting));
 		}
 		/* Set the returnString to be up to the brace token, then the string
-		* representation of current argument in line (first), then the remainder
-		* of the format string, effectively removing the token and replacing it
-		* with the requested item in the final string, then pass it off recursively */
+		 * representation of current argument in line (first), then the remainder
+		 * of the format string, effectively removing the token and replacing it
+		 * with the requested item in the final string, then pass it off recursively */
 
 		std::string firstString{ toStdString(first) };
 		int index{ 0 };
@@ -125,7 +156,7 @@ public:
 
 			/* Since the original string will be modified, the adjusted position must be
 			calculated for any repeated brace tokens, kept track of by index.
-			The length of string representation of first mutiplied by which the iterationn count
+			The length of string representation of first multiplied by which the iterationn count
 			is added, and the length of the brace token multiplied by the iteration count is
 			subtracted, resulting in the correct starting position of the current brace token */
 			size_t lengthOfTokenBracesRemoved{ index * smallestValueLength };
@@ -140,3 +171,4 @@ public:
 };
 
 } // namespace g3
+#endif // STRING_UTIL_H

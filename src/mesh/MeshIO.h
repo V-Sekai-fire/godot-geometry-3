@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  MeshIO.h                                                              */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef MESHIO_H
+#define MESHIO_H
 
 #include <MaterialTypes.h>
 
@@ -32,7 +63,7 @@ public:
 	// [RMSC#] disabled
 	// format readers will inevitably have their own settings, we
 	// can use this to pass arguments to them
-	//CommandArgumentSet CustomFlags = new CommandArgumentSet();
+	// CommandArgumentSet CustomFlags = new CommandArgumentSet();
 
 	ReadOptions() {
 		ReadMaterials = false;
@@ -83,11 +114,11 @@ struct WriteOptions {
 	bool bPerVertexNormals; // write per-vertex normals (OBJ)
 	bool bPerVertexColors; // write per-vertex colors (OBJ)
 	bool bPerVertexUVs; // write per-vertex UVs
-			// can be overridden by per-mesh UVs in WriteMesh
+						// can be overridden by per-mesh UVs in WriteMesh
 	bool bWriteGroups; // write face groups (OBJ)
 
 	bool bCombineMeshes; // combine all input meshes into a single output mesh
-			// some STL readers do not handle multiple solids...
+						 // some STL readers do not handle multiple solids...
 
 	int RealPrecisionDigits; // number of digits of float precision (after decimal)
 
@@ -112,7 +143,7 @@ struct WriteOptions {
 		opt.bWriteMaterials = false;
 		opt.ProgressFunc = nullptr;
 		opt.RealPrecisionDigits = 15;
-		//opt.RealPrecisionDigits = 7;
+		// opt.RealPrecisionDigits = 7;
 		return opt;
 	};
 };
@@ -131,18 +162,19 @@ struct WriteMesh {
 
 	std::vector<GenericMaterialPtr> Materials; // set of materials (possibly) used in this mesh
 	std::map<int, int> TriToMaterialMap; // triangle index -> Materials list index
-	//IIndexMap TriToMaterialMap;
+	// IIndexMap TriToMaterialMap;
 
 	DenseUVMesh *UVs; // separate UV layer (just one for now)
-			// assumption is that # of triangles in this UV mesh is same as in Mesh
+					  // assumption is that # of triangles in this UV mesh is same as in Mesh
 
 	WriteMesh(DMesh3Ptr mesh, std::string name = "") :
 			Mesh(mesh) {
 		Name = name;
-		//UVs = nullptr;
-		//Materials = nullptr;
-		//TriToMaterialMap = nullptr;
+		// UVs = nullptr;
+		// Materials = nullptr;
+		// TriToMaterialMap = nullptr;
 	}
 };
 
 } // namespace g3
+#endif // MESHIO_H

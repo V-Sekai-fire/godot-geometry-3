@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  small_list_set.h                                                      */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef SMALL_LIST_SET_H
+#define SMALL_LIST_SET_H
 
 #include <string>
 
@@ -28,13 +59,13 @@ public:
 	dvector<int> list_heads; // each "list" is stored as index of first element in block-store (like a pointer)
 
 	dvector<int> block_store; // flat buffer used to store per-list initial block
-			// blocks are BLOCKSIZE+2 long, elements are [CurrentCount, item0...itemN, LinkedListPtr]
+							  // blocks are BLOCKSIZE+2 long, elements are [CurrentCount, item0...itemN, LinkedListPtr]
 
 	dvector<int> free_blocks; // list of free blocks, indices into block_store
 	int allocated_count = 0;
 
 	dvector<int> linked_store; // flat buffer used for linked-list elements,
-			// each element is [value, next_ptr]
+							   // each element is [value, next_ptr]
 
 	int free_head_ptr; // index of first free element in linked_store
 
@@ -87,7 +118,7 @@ public:
 			}
 		} else {
 			gDevAssert(list_heads[list_index] == Null);
-			//throw Exception("small_list_set: list at " + list_index + " is not empty!");
+			// throw Exception("small_list_set: list at " + list_index + " is not empty!");
 		}
 	}
 
@@ -141,7 +172,7 @@ public:
 			if (block_store[i] == val) {
 				for (int j = i + 1; j <= iEnd; ++j) // shift left
 					block_store[j - 1] = block_store[j];
-				//block_store[iEnd] = -2;     // OPTIONAL
+				// block_store[iEnd] = -2;     // OPTIONAL
 
 				if (N > BLOCKSIZE) {
 					int cur_ptr = block_store[block_ptr + BLOCK_LIST_OFFSET];
@@ -275,11 +306,11 @@ public:
 			this->goto_next();
 			return *this;
 		}
-		//inline value_iterator operator++(int) {		// postfix
+		// inline value_iterator operator++(int) {		// postfix
 		//	index_iterator copy(*this);
 		//	this->goto_next();
 		//	return copy;
-		//}
+		// }
 
 	protected:
 		inline void goto_next() {
@@ -368,31 +399,31 @@ public:
 	}
 
 	/*
-    /// <summary>
-    /// iterate over the values of list at list_index
-    /// </summary>
-    IEnumerable<int> ValueItr(int list_index)
-    {
-        int block_ptr = list_heads[list_index];
-        if (block_ptr != Null) {
-            int N = block_store[block_ptr];
-            if ( N < BLOCKSIZE ) {
-                int iEnd = block_ptr + N;
-                for (int i = block_ptr + 1; i <= iEnd; ++i)
-                    yield return block_store[i];
-            } else {
-                // we spilled to linked list, have to iterate through it as well
-                int iEnd = block_ptr + BLOCKSIZE;
-                for (int i = block_ptr + 1; i <= iEnd; ++i)
-                    yield return block_store[i];
-                int cur_ptr = block_store[block_ptr + BLOCK_LIST_OFFSET];
-                while (cur_ptr != Null) {
-                    yield return linked_store[cur_ptr];
-                    cur_ptr = linked_store[cur_ptr + 1];
-                }
-            }
-        }
-    }
+	/// <summary>
+	/// iterate over the values of list at list_index
+	/// </summary>
+	IEnumerable<int> ValueItr(int list_index)
+	{
+		int block_ptr = list_heads[list_index];
+		if (block_ptr != Null) {
+			int N = block_store[block_ptr];
+			if ( N < BLOCKSIZE ) {
+				int iEnd = block_ptr + N;
+				for (int i = block_ptr + 1; i <= iEnd; ++i)
+					yield return block_store[i];
+			} else {
+				// we spilled to linked list, have to iterate through it as well
+				int iEnd = block_ptr + BLOCKSIZE;
+				for (int i = block_ptr + 1; i <= iEnd; ++i)
+					yield return block_store[i];
+				int cur_ptr = block_store[block_ptr + BLOCK_LIST_OFFSET];
+				while (cur_ptr != Null) {
+					yield return linked_store[cur_ptr];
+					cur_ptr = linked_store[cur_ptr + 1];
+				}
+			}
+		}
+	}
 */
 
 	/// <summary>
@@ -526,3 +557,4 @@ public:
 };
 
 } // namespace g3
+#endif // SMALL_LIST_SET_H

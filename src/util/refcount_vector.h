@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  refcount_vector.h                                                     */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef REFCOUNT_VECTOR_H
+#define REFCOUNT_VECTOR_H
 
 #include <string>
 
@@ -38,14 +69,14 @@ public:
 		used_count = copy.used_count;
 	}
 
-	//refcount_vector(short * raw_ref_counts, bool build_free_list = false)
+	// refcount_vector(short * raw_ref_counts, bool build_free_list = false)
 	//{
-	//    ref_counts = new dvector<short>(raw_ref_counts);
-	//    free_indices = new dvector<int>();
-	//    used_count = 0;
-	//    if (build_free_list)
-	//        rebuild_free_list();
-	//}
+	//     ref_counts = new dvector<short>(raw_ref_counts);
+	//     free_indices = new dvector<int>();
+	//     used_count = 0;
+	//     if (build_free_list)
+	//         rebuild_free_list();
+	// }
 
 	dvector<short> RawRefCounts() {
 		return ref_counts;
@@ -328,17 +359,17 @@ public:
 	};
 
 	/*
-	* returns iteration object over mapping applied to valid indices
-	* eg usage: for (Vector3d v : mapped_indices(fn_that_looks_up_mesh_vtx_from_id)) { ... }
-	*/
+	 * returns iteration object over mapping applied to valid indices
+	 * eg usage: for (Vector3d v : mapped_indices(fn_that_looks_up_mesh_vtx_from_id)) { ... }
+	 */
 	template <typename ToType>
 	inline mapped_enumerable<ToType> mapped_indices(std::function<ToType(int)> map_func) const {
 		return mapped_enumerable<ToType>(indices(), map_func);
 	}
 
 	/*
-	* iteration object that maps indices output by index_iteration to a second type
-	*/
+	 * iteration object that maps indices output by index_iteration to a second type
+	 */
 	class filtered_enumerable {
 	public:
 		std::function<bool(int)> filter_func;
@@ -363,7 +394,7 @@ public:
 	}
 
 	// [RMS] how?
-	//System.Collections.IEnumerator GetEnumerator()
+	// System.Collections.IEnumerator GetEnumerator()
 	//{
 	//    int nIndex = 0;
 	//    int nLast = max_index;
@@ -390,16 +421,17 @@ public:
 		return str.str();
 	}
 
-	//std::string debug_print()
+	// std::string debug_print()
 	//{
-	//    string s = string.Format("size {0} used {1} free_size {2}\n", ref_counts.size, used_count, free_indices.size);
-	//    for (int i = 0; i < ref_counts.size; ++i)
-	//        s += string.Format("{0}:{1} ", i, ref_counts[i]);
-	//    s += "\nfree:\n";
-	//    for (int i = 0; i < free_indices.size; ++i)
-	//        s += free_indices[i].ToString() + " ";
-	//    return s;
-	//}
+	//     string s = string.Format("size {0} used {1} free_size {2}\n", ref_counts.size, used_count, free_indices.size);
+	//     for (int i = 0; i < ref_counts.size; ++i)
+	//         s += string.Format("{0}:{1} ", i, ref_counts[i]);
+	//     s += "\nfree:\n";
+	//     for (int i = 0; i < free_indices.size; ++i)
+	//         s += free_indices[i].ToString() + " ";
+	//     return s;
+	// }
 };
 
 } // namespace g3
+#endif // REFCOUNT_VECTOR_H

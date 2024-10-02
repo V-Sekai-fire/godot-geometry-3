@@ -1,13 +1,44 @@
-#pragma once
+/**************************************************************************/
+/*  iterator_util.h                                                       */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef ITERATOR_UTIL_H
+#define ITERATOR_UTIL_H
 
 #include <functional>
 
 namespace g3 {
 
 /*
- * Wrapper around an object of type IteratorT that provides STL 
+ * Wrapper around an object of type IteratorT that provides STL
  * iterator-like semantics, that converts from the iteration type
- * (FromType) to a new type (ToType). 
+ * (FromType) to a new type (ToType).
  *
  * Conversion is done via a provided mapping function
  */
@@ -91,7 +122,7 @@ public:
 
 /*
  * Wrapper around existing iterator that returns multiple values, of potentially
- * different type, for each value that input iterator returns. 
+ * different type, for each value that input iterator returns.
  *
  * This is done via an "expansion" function that takes an int reference which
  * indicates "where" we are in the expansion (eg like a state machine).
@@ -160,7 +191,7 @@ public:
 /*
  * Generic "enumerable" object that provides begin/end semantics for
  * an expand_iterator. Allows usage like for ( type x : your_expand_enumerable ) { ... }
- * You can either provide begin/end iterators, or another 
+ * You can either provide begin/end iterators, or another
  * "enumerable" object that has begin()/end() functions.
  */
 template <typename OutputType, typename InputType, typename InputIteratorT>
@@ -194,3 +225,4 @@ public:
 };
 
 } // namespace g3
+#endif // ITERATOR_UTIL_H

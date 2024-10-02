@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  DMesh3.h                                                              */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef DMESH3_H
+#define DMESH3_H
 
 #include <Frame3.h>
 #include <g3types.h>
@@ -58,8 +89,8 @@ enum class MeshHints {
 };
 
 /*
-* Abstracts construction of meshes, so that we can construct different types, etc
-*/
+ * Abstracts construction of meshes, so that we can construct different types, etc
+ */
 struct NewVertexInfo {
 	Vector3d v;
 	Vector3f n, c;
@@ -131,7 +162,7 @@ struct NewVertexInfo {
 // triangle is [v1,v2,v3], then the triangle edges [e1,e2,e3] are
 // e1=edge(v1,v2), e2=edge(v2,v3), e3=edge(v3,v1), where the e# are indexes into edges.
 //
-// Edges are stored as tuples of 4 ints. If the edge is between v1 and v2, with neighbour
+// Edges are stored as tuples of 4 ints. If the edge is between v1 and v2, with neighbor
 // tris t1 and t2, then the edge is [min(v1,v2), max(v1,v2), t1, t2]. For a boundary
 // edge, t2 is InvalidID. t1 is never InvalidID.
 //
@@ -184,7 +215,7 @@ protected:
 	///// Support attaching arbitrary data to mesh.
 	///// Note that metadata is currently **NOT** copied when copying a mesh.
 	///// </summary>
-	//Dictionary<string, object> Metadata = nullptr;
+	// Dictionary<string, object> Metadata = nullptr;
 
 public:
 	virtual ~DMesh3() {} // no pointer members!
@@ -229,15 +260,15 @@ public:
 					((int)flags & (int)MeshComponents::VertexUVs) != 0) {
 	}
 
-	//DMesh3(IMesh copy, MeshHints hints, bool bWantNormals = true, bool bWantColors = true, bool bWantUVs = true)
+	// DMesh3(IMesh copy, MeshHints hints, bool bWantNormals = true, bool bWantColors = true, bool bWantUVs = true)
 	//{
-	//    Copy(copy, hints, bWantNormals, bWantColors, bWantUVs);
-	//}
-	//DMesh3(IMesh copy, MeshHints hints, MeshComponents flags) :
-	//    this(copy, hints, (flags & MeshComponents.VertexNormals) != 0,  (flags & MeshComponents.VertexColors) != 0,
-	//            (flags & MeshComponents.VertexUVs) != 0 )
+	//     Copy(copy, hints, bWantNormals, bWantColors, bWantUVs);
+	// }
+	// DMesh3(IMesh copy, MeshHints hints, MeshComponents flags) :
+	//     this(copy, hints, (flags & MeshComponents.VertexNormals) != 0,  (flags & MeshComponents.VertexColors) != 0,
+	//             (flags & MeshComponents.VertexUVs) != 0 )
 	//{
-	//}
+	// }
 
 	// construct DMesh3 from libigl mesh representation
 	DMesh3(const Eigen::MatrixXd &V, const Eigen::MatrixXi &F) :
@@ -348,13 +379,13 @@ protected:
 			list.push_back(vid);
 		return list;
 	}
-	//List<int> vertex_vertices_list(int vid)
+	// List<int> vertex_vertices_list(int vid)
 	//{
 	//	List<int> vnbrs = List<int>();
 	//	foreach(int eid in vertex_edges.ValueItr(vid))
 	//		vnbrs.Add(edge_other_v(eid, vid));
 	//	return vnbrs;
-	//}
+	// }
 
 	void set_edge_vertices(int eID, int a, int b) {
 		int i = 4 * eID;
@@ -399,16 +430,16 @@ protected:
 			return -1;
 	}
 
-	int replace_triangle_edge(int tID, int eOld, int eNew) {
+	int replace_triangle_edge(int tID, int eOld, int new) {
 		int i = 3 * tID;
 		if (triangle_edges[i] == eOld) {
-			triangle_edges[i] = eNew;
+			triangle_edges[i] = new;
 			return 0;
 		} else if (triangle_edges[i + 1] == eOld) {
-			triangle_edges[i + 1] = eNew;
+			triangle_edges[i + 1] = new;
 			return 1;
 		} else if (triangle_edges[i + 2] == eOld) {
-			triangle_edges[i + 2] = eNew;
+			triangle_edges[i + 2] = new;
 			return 2;
 		} else
 			return -1;
@@ -422,7 +453,7 @@ public:
 
 	CompactInfo CompactCopy(const DMesh3 &copy, bool bNormals = true, bool bColors = true, bool bUVs = true) {
 		// TODO can't do until CompactInfo works
-		//if ( copy.IsCompact() ) {
+		// if ( copy.IsCompact() ) {
 		//    Copy(copy, bNormals, bColors, bUVs);
 		//    CompactInfo ci = CompactInfo() { MapV = IdentityIndexMap() };
 		//    return ci;
@@ -462,9 +493,9 @@ public:
 			max_group_id = std::max(max_group_id, g + 1);
 		}
 
-		//return CompactInfo() {
-		//    MapV = IndexMap(mapV, this.MaxVertexID)
-		//};
+		// return CompactInfo() {
+		//     MapV = IndexMap(mapV, this.MaxVertexID)
+		// };
 		return CompactInfo();
 	}
 
@@ -494,17 +525,17 @@ public:
 	/// Copy IMesh into this mesh. Currently always compacts.
 	/// [TODO] if we get dense hint, we could be smarter w/ vertex map, etc
 	/// </summary>
-	//CompactInfo Copy(IMesh copy, MeshHints hints, bool bNormals = true, bool bColors = true, bool bUVs = true)
+	// CompactInfo Copy(IMesh copy, MeshHints hints, bool bNormals = true, bool bColors = true, bool bUVs = true)
 	//{
-	//    vertices = dvector<double>();
-	//    vertex_edges = small_list_set();
-	//    vertices_refcount = refcount_vector();
-	//    triangles = dvector<int>();
-	//    triangle_edges = dvector<int>();
-	//    triangles_refcount = refcount_vector();
-	//    edges = dvector<int>();
-	//    edges_refcount = refcount_vector();
-	//    max_group_id = 0;
+	//     vertices = dvector<double>();
+	//     vertex_edges = small_list_set();
+	//     vertices_refcount = refcount_vector();
+	//     triangles = dvector<int>();
+	//     triangle_edges = dvector<int>();
+	//     triangles_refcount = refcount_vector();
+	//     edges = dvector<int>();
+	//     edges_refcount = refcount_vector();
+	//     max_group_id = 0;
 
 	//    normals = (bNormals && copy.HasVertexNormals) ? dvector<float>() : nullptr;
 	//    colors = (bColors && copy.HasVertexColors) ? dvector<float>() : nullptr;
@@ -816,17 +847,17 @@ public:
 			return InvalidTriangle();
 	}
 
-	//IEnumerable<int> TriTrianglesItr(int tID) {
-	//    if (triangles_refcount.isValid(tID)) {
-	//        int tei = 3 * tID;
-	//        for (int j = 0; j < 3; ++j) {
-	//            int ei = 4 * triangle_edges[tei + j];
-	//            int nbr_t = (edges[ei + 2] == tID) ? edges[ei + 3] : edges[ei + 2];
-	//            if (nbr_t != DMesh3.InvalidID)
-	//                yield return nbr_t;
-	//        }
-	//    }
-	//}
+	// IEnumerable<int> TriTrianglesItr(int tID) {
+	//     if (triangles_refcount.isValid(tID)) {
+	//         int tei = 3 * tID;
+	//         for (int j = 0; j < 3; ++j) {
+	//             int ei = 4 * triangle_edges[tei + j];
+	//             int nbr_t = (edges[ei + 2] == tID) ? edges[ei + 3] : edges[ei + 2];
+	//             if (nbr_t != DMesh3.InvalidID)
+	//                 yield return nbr_t;
+	//         }
+	//     }
+	// }
 
 	int GetTriangleGroup(int tID) const {
 		return (HasTriangleGroups()) ? -1 : (triangles_refcount.isValid(tID) ? triangle_groups[tID] : 0);
@@ -898,7 +929,7 @@ public:
 		vCentroid = (1.0 / 3.0) * (v0 + v1 + v2);
 		fArea = Area(v0, v1, v2);
 		normal = Normal(v0, v1, v2);
-		//normal = FastNormalArea(ref v0, ref v1, ref v2, out fArea);
+		// normal = FastNormalArea(ref v0, ref v1, ref v2, out fArea);
 	}
 
 	/// <summary>
@@ -1259,7 +1290,7 @@ public:
 			return MeshResult::Failed_VertexAlreadyExists;
 
 		bool bOK = (bUnsafe) ? vertices_refcount.allocate_at_unsafe(vid) :
-								 vertices_refcount.allocate_at(vid);
+							   vertices_refcount.allocate_at(vid);
 		if (bOK == false)
 			return MeshResult::Failed_CannotAllocateVertex;
 
@@ -1384,7 +1415,7 @@ public:
 		}
 
 		bool bOK = (bUnsafe) ? triangles_refcount.allocate_at_unsafe(tid) :
-								 triangles_refcount.allocate_at(tid);
+							   triangles_refcount.allocate_at(tid);
 		if (bOK == false)
 			return MeshResult::Failed_CannotAllocateTriangle;
 
@@ -1764,9 +1795,9 @@ public:
 			}
 			if (n > 0) {
 				double d = 1.0 / n;
-				centroid.x() = centroid.x() * d; 
-				centroid.y() = centroid.y() * d; 
-				centroid.z() = centroid.z() * d; 
+				centroid.x() = centroid.x() * d;
+				centroid.y() = centroid.y() * d;
+				centroid.z() = centroid.z() * d;
 			}
 		}
 	}
@@ -1854,13 +1885,13 @@ protected:
 		int vI = std::min(vA, vB);
 		for (int eid : vertex_edges.values(vI)) {
 			if (edges[4 * eid + 1] == vO)
-				//if (edge_has_v(eid, vO))
+				// if (edge_has_v(eid, vO))
 				return eid;
 		}
 		return InvalidID;
 
 		// this is slower, likely because it creates func<> every time. can we do w/o that?
-		//return vertex_edges.Find(vI, (eid) => { return edges[4 * eid + 1] == vO; }, InvalidID);
+		// return vertex_edges.Find(vI, (eid) => { return edges[4 * eid + 1] == vO; }, InvalidID);
 	}
 
 	int find_edge_from_tri(int vA, int vB, int tID) const {
@@ -2193,36 +2224,36 @@ public:
 	// Metadata support
 	// [RMS] disabled for now
 
-	//bool HasMetadata {
-	//    get { return Metadata != nullptr && Metadata.Keys.Count > 0; }
-	//}
-	//void AttachMetadata(string key, object o)
+	// bool HasMetadata {
+	//     get { return Metadata != nullptr && Metadata.Keys.Count > 0; }
+	// }
+	// void AttachMetadata(string key, object o)
 	//{
-	//    if (Metadata == nullptr)
-	//        Metadata = Dictionary<string, object>();
-	//    Metadata.Add(key, o);
-	//}
-	//object FindMetadata(string key)
+	//     if (Metadata == nullptr)
+	//         Metadata = Dictionary<string, object>();
+	//     Metadata.Add(key, o);
+	// }
+	// object FindMetadata(string key)
 	//{
-	//    if (Metadata == nullptr)
-	//        return nullptr;
-	//    object o = nullptr;
-	//    bool bFound = Metadata.TryGetValue(key, out o);
-	//    return (bFound) ? o : nullptr;
-	//}
-	//bool RemoveMetadata(string key)
+	//     if (Metadata == nullptr)
+	//         return nullptr;
+	//     object o = nullptr;
+	//     bool bFound = Metadata.TryGetValue(key, out o);
+	//     return (bFound) ? o : nullptr;
+	// }
+	// bool RemoveMetadata(string key)
 	//{
-	//    if (Metadata == nullptr)
-	//        return false;
-	//    return Metadata.Remove(key);
-	//}
-	//void ClearMetadata()
+	//     if (Metadata == nullptr)
+	//         return false;
+	//     return Metadata.Remove(key);
+	// }
+	// void ClearMetadata()
 	//{
-	//    if (Metadata != nullptr) {
-	//        Metadata.Clear();
-	//        Metadata = nullptr;
-	//    }
-	//}
+	//     if (Metadata != nullptr) {
+	//         Metadata.Clear();
+	//         Metadata = nullptr;
+	//     }
+	// }
 
 	// direct access to internal dvectors - dangerous!!
 
@@ -2347,7 +2378,7 @@ public:
 	/// </summary>
 	// [RMS] disabled for now
 	CompactInfo CompactInPlace(bool bComputeCompactInfo = false) {
-		//IndexMap mapV = (bComputeCompactInfo) ? IndexMap(MaxVertexID, VertexCount) : nullptr;
+		// IndexMap mapV = (bComputeCompactInfo) ? IndexMap(MaxVertexID, VertexCount) : nullptr;
 		std::map<int, int> mapV;
 		CompactInfo ci = CompactInfo();
 		ci.MapV = mapV;
@@ -2590,8 +2621,8 @@ public:
 		}
 
 		gDevAssert(vertices_refcount.refCount(vID) == 1);
-		//if ( vertices_refcount.refCount(vID) != 1)
-		//    throw std::exception("DMesh3.RemoveVertex: vertex is still referenced");
+		// if ( vertices_refcount.refCount(vID) != 1)
+		//     throw std::exception("DMesh3.RemoveVertex: vertex is still referenced");
 
 		vertices_refcount.decrement(vID);
 		gDevAssert(vertices_refcount.isValid(vID) == false);
@@ -2886,7 +2917,7 @@ public:
 			replace_edge_triangle(edb, t1, t3);
 
 			// edge eab became eaf
-			int eaf = eab; //Edge * eAF = eAB;
+			int eaf = eab; // Edge * eAF = eAB;
 			replace_edge_vertex(eaf, b, f);
 
 			// update a/b/f vertex-edges
@@ -3014,9 +3045,9 @@ public:
 
 	void debug_fail(const std::string &s) {
 #ifdef DEBUG
-		//System.Console.WriteLine("DMesh3.CollapseEdge: check failed: " + s);
+		// System.Console.WriteLine("DMesh3.CollapseEdge: check failed: " + s);
 		gDevAssert(false);
-		//throw Exception("DMesh3.CollapseEdge: check failed: " + s);
+		// throw Exception("DMesh3.CollapseEdge: check failed: " + s);
 #endif
 	}
 
@@ -3296,7 +3327,7 @@ public:
 		// I can't see how to do this purely topologically.
 		// So relying on closest-pairs testing.
 		orient_tri_edge(a, b, GetTriangle(tab));
-		//int tcd_otherv = orient_tri_edge_and_find_other_vtx(ref c, ref d, GetTriangle(tcd));
+		// int tcd_otherv = orient_tri_edge_and_find_other_vtx(ref c, ref d, GetTriangle(tcd));
 		orient_tri_edge(c, d, GetTriangle(tcd));
 		int x = c;
 		c = d;
@@ -3308,11 +3339,11 @@ public:
 
 		// alternative that detects normal flip of triangle tcd. This is a more
 		// robust geometric test, but fails if tri is degenerate...also more expensive
-		//Vector3d otherv = GetVertex(tcd_otherv);
-		//Vector3d Ncd = MathUtil.FastNormalDirection(GetVertex(c), GetVertex(d), otherv);
-		//Vector3d Nab = MathUtil.FastNormalDirection(GetVertex(a), GetVertex(b), otherv);
-		//if (Ncd.Dot(Nab) < 0)
-		//return MeshResult::Failed_SameOrientation;
+		// Vector3d otherv = GetVertex(tcd_otherv);
+		// Vector3d Ncd = MathUtil.FastNormalDirection(GetVertex(c), GetVertex(d), otherv);
+		// Vector3d Nab = MathUtil.FastNormalDirection(GetVertex(a), GetVertex(b), otherv);
+		// if (Ncd.Dot(Nab) < 0)
+		// return MeshResult::Failed_SameOrientation;
 
 		merge_info.eKept = eab;
 		merge_info.eRemoved = ecd;
@@ -3323,7 +3354,7 @@ public:
 		if (b != d && find_edge(b, d) != InvalidID)
 			return MeshResult::Failed_InvalidNeighbourhood;
 
-		// if vertices at either end already share a common neighbour vertex, and we
+		// if vertices at either end already share a common neighbor vertex, and we
 		// do the merge, that would create duplicate edges. This is something like the
 		// 'link condition' in edge collapses.
 		// Note that we have to catch cases where both edges to the shared vertex are
@@ -3434,7 +3465,7 @@ public:
 			bool found = false;
 			// in this loop, we compare 'other' vert_1 and vert_2 of edges around v1.
 			// problem case is when vert_1 == vert_2  (ie two edges w/ same other vtx).
-			//restart_merge_loop:
+			// restart_merge_loop:
 			for (int i = 0; i < Nedges && found == false; ++i) {
 				int edge_1 = edges_v[i];
 				if (IsBoundaryEdge(edge_1) == false)
@@ -3455,9 +3486,9 @@ public:
 						merge_info.eRemovedExtra[vi] = edge_2;
 						merge_info.eKeptExtra[vi] = edge_1;
 
-						//edges_v = vertex_edges_list(v1);      // this code allows us to continue checking, ie in case we had
-						//Nedges = edges_v.Count;               // multiple such edges. but I don't think it's possible.
-						//goto restart_merge_loop;
+						// edges_v = vertex_edges_list(v1);      // this code allows us to continue checking, ie in case we had
+						// Nedges = edges_v.Count;               // multiple such edges. but I don't think it's possible.
+						// goto restart_merge_loop;
 						found = true; // exit outer i loop
 						break; // exit inner j loop
 					}
@@ -3508,7 +3539,7 @@ public:
 		int t1 = add_triangle_only(tv[1], tv[2], center, te[1], ecC, ebC);
 		int t2 = add_triangle_only(tv[2], tv[0], center, te[2], eaC, ecC);
 
-		// second and third edges of original tri have neighbours
+		// second and third edges of original tri have neighbors
 		replace_edge_triangle(te[1], tid, t1);
 		replace_edge_triangle(te[2], tid, t2);
 
@@ -3661,7 +3692,7 @@ public:
 	bool CheckValidity(bool bAllowNonManifoldVertices = false, FailMode eFailMode = FailMode::Throw) const {
 		std::vector<int> triToVtxRefs;
 		triToVtxRefs.resize(MaxVertexID());
-		//int[] triToVtxRefs = new int[this.MaxVertexID];
+		// int[] triToVtxRefs = new int[this.MaxVertexID];
 
 		bool is_ok = true;
 		std::function<void(bool)> CheckOrFailF = [&](bool b) {
@@ -3680,13 +3711,13 @@ public:
 			};
 		}
 
-		//if (normals != null)
+		// if (normals != null)
 		//	CheckOrFailF(normals.size == vertices.size);
-		//if (colors != null)
+		// if (colors != null)
 		//	CheckOrFailF(colors.size == vertices.size);
-		//if (uv != null)
+		// if (uv != null)
 		//	CheckOrFailF(uv.size / 2 == vertices.size / 3);
-		//if (triangle_groups != null)
+		// if (triangle_groups != null)
 		//	CheckOrFailF(triangle_groups.size == triangles.size / 3);
 
 		for (int tID : TriangleIndices()) {
@@ -3791,7 +3822,7 @@ public:
 			GetVtxTriangles(vID, vTris, false);
 			GetVtxTriangles(vID, vTris2, true);
 			CheckOrFailF(vTris.size() == vTris2.size());
-			//System.Console.WriteLine(string.Format("{0} {1} {2}", vID, vTris.Count, GetVtxEdges(vID).Count));
+			// System.Console.WriteLine(string.Format("{0} {1} {2}", vID, vTris.Count, GetVtxEdges(vID).Count));
 			if (bAllowNonManifoldVertices)
 				CheckOrFailF(vTris.size() <= GetVtxEdgeCount(vID));
 			else
@@ -3822,3 +3853,4 @@ public:
 }; // end DMesh3
 
 } // namespace g3
+#endif // DMESH3_H

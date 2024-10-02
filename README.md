@@ -1,6 +1,6 @@
 # geometry3cpp
 
-Open-Source (Boost-license) C++11 library for geometric computing. 
+Open-Source (Boost-license) C++11 library for geometric computing.
 
 geometry3cpp is an in-progress port of [geometry3Sharp](https://github.com/gradientspace/geometry3Sharp), the gradientspace C# library for geometric computing. (Except the parts of that library that were ported from the C++ WildMagic/GTEngine libraries, we just use those directly)
 
@@ -8,7 +8,7 @@ geometry3cpp is an in-progress port of [geometry3Sharp](https://github.com/gradi
 
 # Goals
 
-g3cpp is intended to be a general-purpose high-level geometric computing package, with a focus on triangle mesh processing. It includes *other* math libraries which provide most of the low-level vector math stuff, solvers, etc. 
+g3cpp is intended to be a general-purpose high-level geometric computing package, with a focus on triangle mesh processing. It includes *other* math libraries which provide most of the low-level vector math stuff, solvers, etc.
 
 # Current State
 
@@ -24,9 +24,9 @@ All dependencies are included in the repository, for convenience.
 
 1) [**Eigen** ](https://eigen.tuxfamily.org/), the C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms (according to their website). **MPL2 License**. Header-only, source included in */thirdparty/Eigen* for ease of compiling, but you could probably get CMake to look somewhere else. The Vector types (Vector2d, Vector3d, etc) in g3cpp are Eigen vectors.
 
-2) **WildMagic5** from [GeometricTools](https://www.geometrictools.com/), written by David Eberly. **Boost License**. Only the LibCore and LibMathematics components. Vector math, Geometric intersection and distance tests in 2D and 3D, containment fitters, geometric approximations fitters, Computational Geometry algorithms, Numerical methods, rational number types, 1/2/3D interpolation methods. It's amazing, I've been using WildMagic for 10+ years, since version 2. The source is included in the */external/* subdirectory. This library is no longer maintained and so I have made various local changes to ease porting from the C# version and make it easier to pass vector types between Eigen and Wm5. 
+2) **WildMagic5** from [GeometricTools](https://www.geometrictools.com/), written by David Eberly. **Boost License**. Only the LibCore and LibMathematics components. Vector math, Geometric intersection and distance tests in 2D and 3D, containment fitters, geometric approximations fitters, Computational Geometry algorithms, Numerical methods, rational number types, 1/2/3D interpolation methods. It's amazing, I've been using WildMagic for 10+ years, since version 2. The source is included in the */external/* subdirectory. This library is no longer maintained and so I have made various local changes to ease porting from the C# version and make it easier to pass vector types between Eigen and Wm5.
 
-3) [**libigl**](https://libigl.github.io/), the C++ header-only mesh/geometry processing library. libigl is built on Eigen and has implementations of most standard geometry processing algorithms/techniques. Source is included in */external/libigl*. **MPL2 License** is used for the core library, and this is all that geometry3cpp will call. However the code includes calls to various other libaries, including CGAL, LGPL/GPL-licensed code, etc. These will not be included in your binaries unless you explicitly call them via the **igl::copyleft::** namespace. 
+3) [**libigl**](https://libigl.github.io/), the C++ header-only mesh/geometry processing library. libigl is built on Eigen and has implementations of most standard geometry processing algorithms/techniques. Source is included in */external/libigl*. **MPL2 License** is used for the core library, and this is all that geometry3cpp will call. However the code includes calls to various other libraries, including CGAL, LGPL/GPL-licensed code, etc. These will not be included in your binaries unless you explicitly call them via the **igl::copyleft::** namespace.
 
 # Building
 

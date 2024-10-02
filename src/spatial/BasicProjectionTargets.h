@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  BasicProjectionTargets.h                                              */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef BASICPROJECTIONTARGETS_H
+#define BASICPROJECTIONTARGETS_H
 
 #include <DMeshAABBTree3.h>
 #include <SpatialInterfaces.h>
@@ -82,14 +113,14 @@ public:
 	/// <summary>
 	/// Automatically construct fastest projection target for region of mesh
 	/// </summary>
-	//static MeshProjectionTarget Auto(DMesh3 mesh, IEnumerable<int> triangles, int nExpandRings = 5)
+	// static MeshProjectionTarget Auto(DMesh3 mesh, IEnumerable<int> triangles, int nExpandRings = 5)
 	//{
 	//	MeshFaceSelection targetRegion = new MeshFaceSelection(mesh);
 	//	targetRegion.Select(triangles);
 	//	targetRegion.ExpandToOneRingNeighbours(nExpandRings);
 	//	DSubmesh3 submesh = new DSubmesh3(mesh, targetRegion);
 	//	return new MeshProjectionTarget(submesh.SubMesh);
-	//}
+	// }
 };
 
 //
@@ -97,7 +128,7 @@ public:
 ///// Extension of MeshProjectionTarget that allows the target to have a transformation
 ///// relative to it's internal space. Call SetTransform(), or initialize the transforms yourself
 ///// </summary>
-//class TransformedMeshProjectionTarget : MeshProjectionTarget
+// class TransformedMeshProjectionTarget : MeshProjectionTarget
 //{
 //	TransformSequence SourceToTargetXForm;
 //	TransformSequence TargetToSourceXForm;
@@ -132,7 +163,7 @@ public:
 //		vProjectNormal = TargetToSourceXForm.TransformV(vTargetProjNormal).Normalized;
 //		return TargetToSourceXForm.TransformP(vTargetProj);
 //	}
-//};
+// };
 //
 //
 //
@@ -142,7 +173,7 @@ public:
 //
 //
 //
-//class PlaneProjectionTarget : IProjectionTarget
+// class PlaneProjectionTarget : IProjectionTarget
 //{
 //	Vector3d Origin;
 //	Vector3d Normal;
@@ -152,12 +183,12 @@ public:
 //		Vector3d d = vPoint - Origin;
 //		return Origin + (d - d.Dot(Normal) * Normal);
 //	}
-//};
+// };
 //
 //
 //
 //
-//class CircleProjectionTarget : IProjectionTarget
+// class CircleProjectionTarget : IProjectionTarget
 //{
 //	Circle3d Circle;
 //
@@ -167,26 +198,26 @@ public:
 //		d.GetSquared();
 //		return d.CircleClosest;
 //	}
-//};
+// };
 //
 //
 //
-//class CylinderProjectionTarget : IProjectionTarget
+// class CylinderProjectionTarget : IProjectionTarget
 //{
 //	Cylinder3d Cylinder;
 //
-//	Vector3d Project(Vector3d vPoint, int identifer = -1)
+//	Vector3d Project(Vector3d vPoint, int identifier = -1)
 //	{
 //		DistPoint3Cylinder3 d = new DistPoint3Cylinder3(vPoint, Cylinder);
 //		d.GetSquared();
 //		return d.CylinderClosest;
 //	}
-//};
+// };
 //
 //
 //
 //
-//class SequentialProjectionTarget : IProjectionTarget
+// class SequentialProjectionTarget : IProjectionTarget
 //{
 //	IProjectionTarget[] Targets{ get; set; }
 //
@@ -204,6 +235,7 @@ public:
 //		}
 //		return vCur;
 //	}
-//};
+// };
 
 } // namespace g3
+#endif // BASICPROJECTIONTARGETS_H

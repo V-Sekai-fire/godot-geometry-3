@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  VectorUtil.h                                                          */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef VECTORUTIL_H
+#define VECTORUTIL_H
 
 #include <g3types.h>
 #include <math.h>
@@ -10,9 +41,9 @@
 namespace g3 {
 
 /*
-	 * if bToZAxis is false, compute matrix that rotates Z axis into vAlignWith
-	 * if bToZAxis is true, compute matrix that rotates vAlignWith into Z axis
-	 */
+ * if bToZAxis is false, compute matrix that rotates Z axis into vAlignWith
+ * if bToZAxis is true, compute matrix that rotates vAlignWith into Z axis
+ */
 template <class Real>
 void ComputeAlignZAxisMatrix(const Vector3<Real> &vAlignWith,
 		Matrix3<Real> &matrix, bool bToZAxis = false);
@@ -122,8 +153,8 @@ template <class Real>
 bool IsObtuse(const Vector3<Real> &v1, const Vector3<Real> &v2, const Vector3<Real> &v3);
 
 /*
-	 * inline utilities
-	 */
+ * inline utilities
+ */
 
 inline bool IsFinite(const Vector3d &v) {
 	return isfinite(v.x()) && isfinite(v.y()) && isfinite(v.z());
@@ -155,18 +186,18 @@ inline Matrix2d f2d(const Matrix2f &v) {
 	return v.cast<double>();
 }
 
-//inline AxisAlignedBox2f d2f(const AxisAlignedBox2d & v) {
+// inline AxisAlignedBox2f d2f(const AxisAlignedBox2d & v) {
 //	return AxisAlignedBox2f((float)v.Min[0], (float)v.Max[0], (float)v.Min[1], (float)v.Max[1] );
-//}
-//inline AxisAlignedBox3f d2f(const AxisAlignedBox3d & v) {
+// }
+// inline AxisAlignedBox3f d2f(const AxisAlignedBox3d & v) {
 //	return AxisAlignedBox3f((float)v.Min[0], (float)v.Max[0], (float)v.Min[1], (float)v.Max[1], (float)v.Min[2], (float)v.Max[2] );
-//}
-//inline AxisAlignedBox2d f2d(const AxisAlignedBox2f & v) {
+// }
+// inline AxisAlignedBox2d f2d(const AxisAlignedBox2f & v) {
 //	return AxisAlignedBox2d((double)v.Min[0], (double)v.Max[0], (double)v.Min[1], (double)v.Max[1]);
-//}
-//inline AxisAlignedBox3d f2d(const AxisAlignedBox3f & v) {
+// }
+// inline AxisAlignedBox3d f2d(const AxisAlignedBox3f & v) {
 //	return AxisAlignedBox3d((double)v.Min[0], (double)v.Max[0], (double)v.Min[1], (double)v.Max[1], (double)v.Min[2], (double)v.Max[2]);
-//}
+// }
 
 template <class Real>
 inline Real Clamp(const Real &fValue, const Real &fMin, const Real &fMax) {
@@ -791,3 +822,5 @@ template bool IsObtuse(const Vector3<double> &v1,
 		const Vector3<double> &v2,
 		const Vector3<double> &v3);
 } // namespace g3
+
+#endif // VECTORUTIL_H

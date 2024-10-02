@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  MeshConstraints.h                                                     */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef MESHCONSTRAINTS_H
+#define MESHCONSTRAINTS_H
 
 #include <g3types.h>
 
@@ -12,7 +43,7 @@ enum class EdgeRefineFlags {
 	FullyConstrained = NoFlip | NoSplit | NoCollapse,
 
 	PreserveTopology = 8, // this flag just means we want to avoid 'losing' this edge
-	// when we collapse a neighbour (but allow the edge itself to be collapsed).
+	// when we collapse a neighbor (but allow the edge itself to be collapsed).
 	// Eg when constraining edges for Reduce
 };
 
@@ -20,11 +51,11 @@ struct EdgeConstraint {
 public:
 	EdgeRefineFlags refineFlags;
 	IProjectionTargetPtr Target; // edge is associated with this projection Target.
-			// Currently only used as information, we do not explicitly
-			// project edges onto targets (must also set VertexConstraint)
+								 // Currently only used as information, we do not explicitly
+								 // project edges onto targets (must also set VertexConstraint)
 
 	int TrackingSetID; // not actually a constraint, but allows is to find descendents
-			// of an constrained input edge
+					   // of an constrained input edge
 
 	EdgeConstraint() {
 		refineFlags = EdgeRefineFlags::NoConstraint;
@@ -69,14 +100,14 @@ public:
 struct VertexConstraint {
 public:
 	static constexpr int InvalidSetID = -1; // clients should interpret negative values as invalid
-			// (in case you wanted to use negative values for something else...)
+											// (in case you wanted to use negative values for something else...)
 
 	bool Fixed;
 	int FixedSetID; // in Remesher, we can allow two Fixed vertices with
-			// same FixedSetID to be collapsed together
+					// same FixedSetID to be collapsed together
 
 	IProjectionTargetPtr Target; // vertex is constrained to lie on this projection Target.
-			// Fixed and Target are mutually exclusive
+								 // Fixed and Target are mutually exclusive
 
 	VertexConstraint() {
 		Fixed = false;
@@ -171,10 +202,10 @@ public:
 		Vertices.erase(vid);
 	}
 
-	//System.Collections.IEnumerable VertexConstraintsItr() {
+	// System.Collections.IEnumerable VertexConstraintsItr() {
 	//	foreach(KeyValuePair<int, VertexConstraint> v in Vertices)
 	//		yield return v;
-	//}
+	// }
 
 	bool HasConstraints() {
 		return Edges.size() > 0 || Vertices.size() > 0;
@@ -182,3 +213,4 @@ public:
 };
 
 } // namespace g3
+#endif // MESHCONSTRAINTS_H

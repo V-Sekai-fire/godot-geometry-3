@@ -1,4 +1,35 @@
-#pragma once
+/**************************************************************************/
+/*  DCurve3.h                                                             */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef DCURVE3_H
+#define DCURVE3_H
 
 #include "ISampledCurve3d.h"
 #include "Wm5Segment3.h"
@@ -161,16 +192,16 @@ struct Segment3d {
 // 	}
 
 // 	Vector3f GetP0() {
-// 		 return Center - Extent * Direction; 
+// 		 return Center - Extent * Direction;
 // 	}
 // 	Vector3f GetP1() {
-// 		 return Center + Extent * Direction; 
+// 		 return Center + Extent * Direction;
 // 	}
 // 	Vector3f SetP0(Vector3f value) {
-// 		 update_from_endpoints(value, GetP1()); 
+// 		 update_from_endpoints(value, GetP1());
 // 	}
 // 	Vector3f SetP1(Vector3f value) {
-// 		 update_from_endpoints(GetP0(), value); 
+// 		 update_from_endpoints(GetP0(), value);
 // 	}
 // 	float Length() {
 // 		return 2 * Extent;
@@ -242,11 +273,10 @@ public:
 			}
 		}
 	}
-	template<typename T> 
-	static T lerp(float t, const T& a, const T& b) {
-		return a*(1-t) + b*t;
+	template <typename T>
+	static T lerp(float t, const T &a, const T &b) {
+		return a * (1 - t) + b * t;
 	}
-
 };
 
 /// <summary>
@@ -306,17 +336,17 @@ public:
 			double open_angle = std::abs(OpeningAngleDeg(k));
 			if (open_angle > flat_thresh && k > 0) {
 				// ignore skip this vertex
-			} else if (open_angle > sharp_thresh) {				
+			} else if (open_angle > sharp_thresh) {
 				std::list<Vector3d>::iterator it = vertices.begin();
 				std::advance(it, k);
 				resampled.AppendVertex(*it);
-			} else {				
+			} else {
 				std::list<g3::Vector3d>::iterator it = vertices.begin();
 				std::advance(it, (k + 1) % NV);
 				Vector3d n = *it;
 				it = vertices.begin();
 				std::advance(it, k == 0 ? NV - 1 : k - 1);
-				Vector3d p = *it;						
+				Vector3d p = *it;
 				it = vertices.begin();
 				std::advance(it, k);
 				resampled.AppendVertex(CurveUtils::lerp<Vector3d>(prev_t, p, *it));
@@ -537,7 +567,7 @@ public:
 		}
 	}
 
-	Index2i Neighbours(int i) {
+	Index2i Neighbors(int i) {
 		int NV = vertices.size();
 		if (Closed()) {
 			if (i == 0)
@@ -627,3 +657,5 @@ public:
 	}
 };
 } // namespace g3
+
+#endif // DCURVE3_H

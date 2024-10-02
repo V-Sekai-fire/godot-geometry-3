@@ -1,25 +1,56 @@
-#pragma once
+/**************************************************************************/
+/*  Frame3.h                                                              */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
+#ifndef FRAME3_H
+#define FRAME3_H
 
 #include <g3types.h>
 
 #include <VectorUtil.h>
 
 /*
-* Frame3 represents an orthonormal 3D coordinate frame, ie 3 orthogonal axes and an origin point.
-* Although it is possible to pack all that information into a Matrix4, or a Matrix3+Vector3, it
-* is not very convenient to work with. Making the axes available explicitly allows for much
-* clearer code.
-*
-* Frame3 also provides functions to:
-*    - manipulate the frame by (eg) setting one axis to point in a particular direction
-*    - transform vectors and frames to/from frame-relative coordinates
-*    - (TODO: ray-intersection, project to plane, ...)
-*
-* Internally, Frame3 stores the inverse of the rotation matrix that would take the XYZ axes
-* to the Frame axes. This is so that the axes are the rows of the matrix, and hence in
-* row-major storage the 3 floats of each axis are contiguous.
-*
-*/
+ * Frame3 represents an orthonormal 3D coordinate frame, ie 3 orthogonal axes and an origin point.
+ * Although it is possible to pack all that information into a Matrix4, or a Matrix3+Vector3, it
+ * is not very convenient to work with. Making the axes available explicitly allows for much
+ * clearer code.
+ *
+ * Frame3 also provides functions to:
+ *    - manipulate the frame by (eg) setting one axis to point in a particular direction
+ *    - transform vectors and frames to/from frame-relative coordinates
+ *    - (TODO: ray-intersection, project to plane, ...)
+ *
+ * Internally, Frame3 stores the inverse of the rotation matrix that would take the XYZ axes
+ * to the Frame axes. This is so that the axes are the rows of the matrix, and hence in
+ * row-major storage the 3 floats of each axis are contiguous.
+ *
+ */
 namespace g3 {
 
 template <class Real>
@@ -315,3 +346,4 @@ public:
 typedef Frame3<float> Frame3f;
 typedef Frame3<double> Frame3d;
 } // namespace g3
+#endif // FRAME3_H

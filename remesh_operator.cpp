@@ -1,6 +1,57 @@
+/**************************************************************************/
+/*  remesh_operator.cpp                                                   */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                             GODOT ENGINE                               */
+/*                        https://godotengine.org                         */
+/**************************************************************************/
+/* Copyright (c) 2014-present Godot Engine contributors (see AUTHORS.md). */
+/* Copyright (c) 2007-2014 Juan Linietsky, Ariel Manzur.                  */
+/*                                                                        */
+/* Permission is hereby granted, free of charge, to any person obtaining  */
+/* a copy of this software and associated documentation files (the        */
+/* "Software"), to deal in the Software without restriction, including    */
+/* without limitation the rights to use, copy, modify, merge, publish,    */
+/* distribute, sublicense, and/or sell copies of the Software, and to     */
+/* permit persons to whom the Software is furnished to do so, subject to  */
+/* the following conditions:                                              */
+/*                                                                        */
+/* The above copyright notice and this permission notice shall be         */
+/* included in all copies or substantial portions of the Software.        */
+/*                                                                        */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,        */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF     */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY   */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,   */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE      */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
+/**************************************************************************/
+
 #include "remesh_operator.h"
 
+#include "MeshboundaryLoop.h"
+#include "profile_util.h"
+#include "src/geometry/g3types.h"
+#include "src/mesh/DMesh3Builder.h"
+#include "src/mesh/Remesher.h"
+#include "src/spatial/BasicProjectionTargets.h"
+#include <DMesh3.h>
+#include <DMeshAABBTree3.h>
+#include <MeshQueries.h>
+#include <MeshSubdivider.h>
+#include <VectorUtil.h>
+#include <refcount_vector.h>
+#include <small_list_set.h>
+#include <algorithm>
+#include <limits>
+#include <list>
 
+#include "scene/resources/surface_tool.h"
+#include "src/geometry/MeshboundaryLoop.h"
+#include "src/mesh/DMesh3.h"
+#include "src/mesh/MeshConstraints.h"
+#include "src/spatial/DCurveProject.h"
 
 namespace g3 {
 void PreserveAllBoundaryEdges(g3::MeshConstraintsPtr cons,
@@ -214,30 +265,29 @@ Array geometry3_process(Array p_mesh) {
 		}
 		VectoriDynamic bones;
 		VectorfDynamic weights;
-		if (bones_array.size() && bones_array.size() == vertex_array.size() * 8
-		&&
-		    bones_array.size() == weights_array.size()) {
-		  const int count = 8;
-		  bones.resize(count);
-		  for (int32_t i = 0; i < count; i++) {
-		    bones[i] = bones_array[vert_i * count + i];
-		  }
-		  weights.resize(count);
-		  for (int32_t i = 0; i < count; i++) {
-		    weights[i] = weights_array[vert_i * count + i];
-		  }
+		if (bones_array.size() && bones_array.size() == vertex_array.size() * 8 &&
+				bones_array.size() == weights_array.size()) {
+			const int count = 8;
+			bones.resize(count);
+			for (int32_t i = 0; i < count; i++) {
+				bones[i] = bones_array[vert_i * count + i];
+			}
+			weights.resize(count);
+			for (int32_t i = 0; i < count; i++) {
+				weights[i] = weights_array[vert_i * count + i];
+			}
 		} else if (bones_array.size() &&
-		           bones_array.size() == vertex_array.size() * 4 &&
-		           weights_array.size() == bones_array.size()) {
-		  const int count = 4;
-		  bones.resize(count);
-		  for (int32_t i = 0; i < count; i++) {
-		    bones[i] = bones_array[vert_i * count + i];
-		  }
-		  weights.resize(count);
-		  for (int32_t i = 0; i < count; i++) {
-		    weights[i] = weights_array[vert_i * count + i];
-		  }
+				   bones_array.size() == vertex_array.size() * 4 &&
+				   weights_array.size() == bones_array.size()) {
+			const int count = 4;
+			bones.resize(count);
+			for (int32_t i = 0; i < count; i++) {
+				bones[i] = bones_array[vert_i * count + i];
+			}
+			weights.resize(count);
+			for (int32_t i = 0; i < count; i++) {
+				weights[i] = weights_array[vert_i * count + i];
+			}
 		}
 		// NewVertexInfo info = NewVertexInfo(Vector3d(vert.x, vert.y, vert.z),
 		//                                    Vector3f(normal.x, normal.y,
@@ -261,7 +311,7 @@ Array geometry3_process(Array p_mesh) {
 		g3_mesh->AppendTriangle(new_tri);
 	}
 	Remesher r(g3_mesh);
-  // broke compactinplace
+	// broke compactinplace
 	// g3_mesh->CompactInPlace();
 	// g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
 	// PreserveAllBoundaryEdges(cons, g3_mesh);
@@ -358,18 +408,18 @@ Array geometry3_process(Array p_mesh) {
 
 } // namespace g3
 
-Ref<ArrayMesh> RemeshOperator::process(Ref <ArrayMesh> p_mesh){
-    Ref<ArrayMesh> array_mesh = memnew(ArrayMesh);
-    if (p_mesh.is_null()) {
-        return array_mesh; // Return an empty ArrayMesh if input is invalid
-    }
-    int surface_count = p_mesh->get_surface_count();
-    for (int i = 0; i < surface_count; ++i) {
-        Array surface_arrays = p_mesh->surface_get_arrays(i);
-        surface_arrays = g3::geometry3_process(surface_arrays);
-        array_mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, surface_arrays);
-    }
-    return array_mesh;
+Ref<ArrayMesh> RemeshOperator::process(Ref<ArrayMesh> p_mesh) {
+	Ref<ArrayMesh> array_mesh = memnew(ArrayMesh);
+	if (p_mesh.is_null()) {
+		return array_mesh; // Return an empty ArrayMesh if input is invalid
+	}
+	int surface_count = p_mesh->get_surface_count();
+	for (int i = 0; i < surface_count; ++i) {
+		Array surface_arrays = p_mesh->surface_get_arrays(i);
+		surface_arrays = g3::geometry3_process(surface_arrays);
+		array_mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, surface_arrays);
+	}
+	return array_mesh;
 }
 
 void RemeshOperator::_bind_methods() {
