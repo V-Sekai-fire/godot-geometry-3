@@ -245,11 +245,11 @@ inline bool EpsilonEqual(const Eigen::MatrixBase<DerivedA> &m1, const Eigen::Mat
 /// </summary>
 /// <returns>The normal direction.</returns>
 template <typename DerivedA, typename DerivedB, typename DerivedC>
-inline Eigen::MatrixBase<DerivedC> FastNormalDirection(
-		const Eigen::MatrixBase<DerivedA> &v1,
-		const Eigen::MatrixBase<DerivedB> &v2,
-		const Eigen::MatrixBase<DerivedC> &v3) {
-	return (v2 - v1).cross(v3 - v1);
+inline Eigen::Matrix<typename DerivedA::Scalar, 3, 1> FastNormalDirection(
+    const Eigen::MatrixBase<DerivedA>& v1,
+    const Eigen::MatrixBase<DerivedB>& v2,
+    const Eigen::MatrixBase<DerivedC>& v3) {
+    return (v2 - v1).cross(v3 - v1);
 }
 
 template <typename DerivedA, typename T>
