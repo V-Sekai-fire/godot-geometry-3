@@ -4,6 +4,7 @@ Import("env")
 Import("env_modules")
 
 env_geometry = env_modules.Clone()
+env_geometry.Append(CPPDEFINES=['G3_STATIC_LIB'])
 
 env_geometry.Prepend(CPPPATH=["."])
 env_geometry.Prepend(CPPPATH=["src"])

@@ -293,11 +293,11 @@ protected:
 
 public:
 	double ArcLength() {
-		std::vector<Vector3d> vertices;
-		for (Vector3d vert : vertices) {
-			vertices.push_back(vert);
+		std::vector<Vector3d> arc_length_vertices;
+		for (Vector3d vert : arc_length_vertices) {
+			arc_length_vertices.push_back(vert);
 		}
-		return CurveUtils::ArcLength(vertices, Closed());
+		return CurveUtils::ArcLength(arc_length_vertices, Closed());
 	}
 
 	/// <summary>
