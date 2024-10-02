@@ -430,19 +430,20 @@ protected:
 			return -1;
 	}
 
-	int replace_triangle_edge(int tID, int eOld, int new) {
-		int i = 3 * tID;
-		if (triangle_edges[i] == eOld) {
-			triangle_edges[i] = new;
+	int replace_triangle_edge(int p_tID, int p_eOld, int p_new) {
+		int i = 3 * p_tID;
+		if (triangle_edges[i] == p_eOld) {
+			triangle_edges[i] = p_new;
 			return 0;
-		} else if (triangle_edges[i + 1] == eOld) {
-			triangle_edges[i + 1] = new;
+		} else if (triangle_edges[i + 1] == p_eOld) {
+			triangle_edges[i + 1] = p_new;
 			return 1;
-		} else if (triangle_edges[i + 2] == eOld) {
-			triangle_edges[i + 2] = new;
+		} else if (triangle_edges[i + 2] == p_eOld) {
+			triangle_edges[i + 2] = p_new;
 			return 2;
-		} else
+		} else {
 			return -1;
+		}
 	}
 
 public:
