@@ -22,7 +22,7 @@ The dependencies contain an enormous amount of functionality, much more than geo
 
 All dependencies are included in the repository, for convenience.
 
-1) [**Eigen** ](https://eigen.tuxfamily.org/), the C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms (according to their website). **MPL2 License**. Header-only, source included in */external/Eigen* for ease of compiling, but you could probably get CMake to look somewhere else. The Vector types (Vector2d, Vector3d, etc) in g3cpp are Eigen vectors.
+1) [**Eigen** ](https://eigen.tuxfamily.org/), the C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms (according to their website). **MPL2 License**. Header-only, source included in */thirdparty/Eigen* for ease of compiling, but you could probably get CMake to look somewhere else. The Vector types (Vector2d, Vector3d, etc) in g3cpp are Eigen vectors.
 
 2) **WildMagic5** from [GeometricTools](https://www.geometrictools.com/), written by David Eberly. **Boost License**. Only the LibCore and LibMathematics components. Vector math, Geometric intersection and distance tests in 2D and 3D, containment fitters, geometric approximations fitters, Computational Geometry algorithms, Numerical methods, rational number types, 1/2/3D interpolation methods. It's amazing, I've been using WildMagic for 10+ years, since version 2. The source is included in the */external/* subdirectory. This library is no longer maintained and so I have made various local changes to ease porting from the C# version and make it easier to pass vector types between Eigen and Wm5. 
 

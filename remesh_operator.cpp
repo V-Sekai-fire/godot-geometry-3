@@ -1,32 +1,6 @@
-#pragma once
-#include "core/object/ref_counted.h"
-#include "scene/resources/mesh.h"
+#include "remesh_operator.h"
 
-#include "scene/resources/mesh.h"
 
-#include "MeshboundaryLoop.h"
-#include "profile_util.h"
-#include "src/geometry/g3types.h"
-#include "src/mesh/DMesh3Builder.h"
-#include "src/mesh/Remesher.h"
-#include "src/spatial/BasicProjectionTargets.h"
-#include <DMesh3.h>
-#include <DMeshAABBTree3.h>
-#include <MeshQueries.h>
-#include <MeshSubdivider.h>
-#include <VectorUtil.h>
-#include <refcount_vector.h>
-#include <small_list_set.h>
-#include <algorithm>
-#include <limits>
-#include <list>
-
-#include "../../godot/scene/resources/surface_tool.h"
-#include "geometry3_process.h"
-#include "src/geometry/MeshboundaryLoop.h"
-#include "src/mesh/DMesh3.h"
-#include "src/mesh/MeshConstraints.h"
-#include "src/spatial/DCurveProject.h"
 
 namespace g3 {
 void PreserveAllBoundaryEdges(g3::MeshConstraintsPtr cons,
@@ -381,4 +355,23 @@ Array geometry3_process(Array p_mesh) {
 			(OS::get_singleton()->get_ticks_msec() - ticks) / 1000.0f));
 	return mesh;
 }
+
 } // namespace g3
+
+Ref<ArrayMesh> RemeshOperator::process(Ref <ArrayMesh> p_mesh){
+    Ref<ArrayMesh> array_mesh = memnew(ArrayMesh);
+    if (p_mesh.is_null()) {
+        return array_mesh; // Return an empty ArrayMesh if input is invalid
+    }
+    int surface_count = p_mesh->get_surface_count();
+    for (int i = 0; i < surface_count; ++i) {
+        Array surface_arrays = p_mesh->surface_get_arrays(i);
+        surface_arrays = g3::geometry3_process(surface_arrays);
+        array_mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, surface_arrays);
+    }
+    return array_mesh;
+}
+
+void RemeshOperator::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("remesh", "mesh"), &RemeshOperator::process);
+}

@@ -226,8 +226,8 @@ typedef unsigned __int64    uint64_t;
 
 // [geometry3]
 // Include eigen headers
-#include "../../../external/Eigen/Eigen/Core"
-#include "../../../external/Eigen/Eigen/Geometry"
+#include "../../../thirdparty/Eigen/Eigen/Core"
+#include "../../../thirdparty/Eigen/Eigen/Geometry"
 // [geometry3]
 
 

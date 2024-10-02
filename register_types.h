@@ -31,7 +31,9 @@
 #ifndef GEOMETRY3_REGISTER_TYPES_H
 #define GEOMETRY3_REGISTER_TYPES_H
 
-void register_geometry3_types();
-void unregister_geometry3_types();
+#include "modules/register_module_types.h"
+
+void initialize_geometry3_module(ModuleInitializationLevel p_level);
+void uninitialize_geometry3_module(ModuleInitializationLevel p_level);
 
 #endif // PVR_REGISTER_TYPES_H

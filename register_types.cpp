@@ -30,12 +30,18 @@
 
 #include "register_types.h"
 #include "scene/resources/surface_tool.h"
-#include "geometry3_process.h"
+#include "remesh_operator.h"
 
-void register_geometry3_types() {
-	SurfaceTool::process_geometry_func = g3::geometry3_process;
+
+void initialize_geometry3_module(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
+    ClassDB::register_class<RemeshOperator>();
 }
 
-void unregister_geometry3_types() {
-	SurfaceTool::process_geometry_func = nullptr;
+void uninitialize_geometry3_module(ModuleInitializationLevel p_level) {
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+		return;
+	}
 }
