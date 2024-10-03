@@ -313,30 +313,31 @@ Array geometry3_process(Array p_mesh) {
 	Remesher r(g3_mesh);
 	// broke compactinplace
 	// g3_mesh->CompactInPlace();
-	g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
-	PreserveAllBoundaryEdges(cons, g3_mesh);
-	r.SmoothType = Remesher::SmoothTypes::Uniform;
-	r.SetExternalConstraints(cons);
-	r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
-	// PreserveBoundaryLoops(cons, g3_mesh);
-	// http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
+	// g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
+	// PreserveAllBoundaryEdges(cons, g3_mesh);
+	// r.SmoothType = Remesher::SmoothTypes::Uniform;
+	// r.SetExternalConstraints(cons);
+	// r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
+	// // PreserveBoundaryLoops(cons, g3_mesh);
+	// // http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
 	int iterations = 2;
-	r.PreventNormalFlips = true;
-	double avg_edge_len = 0.01;
-	//double min_edge_len = 0.0;
-	//double max_edge_len = 0.0;
-	//EdgeLengthStats(g3_mesh, min_edge_len, max_edge_len, avg_edge_len);
-	print_line(vformat("target edge len %.2f", avg_edge_len));
-	r.SetTargetEdgeLength(avg_edge_len);
-	r.SmoothSpeedT = 1.0f / iterations;
-	r.Precompute();
-	for (int k = 0; k < iterations; ++k) {
-		r.BasicRemeshPass();
-		print_line("remesh pass " + itos(k));
-	}
-	print_line("remesh done");
-	RemoveFinTriangles(g3_mesh, true);
-	std::cout << g3_mesh->MeshInfoString();
+	// r.EnableParallelSmooth = true; // TODO Implement parallel smooth 2021-06-29 FIRE
+	// r.PreventNormalFlips = true;
+	double avg_edge_len = 0.5;
+	// double min_edge_len = 0.0;
+	// double max_edge_len = 0.0;
+	// EdgeLengthStats(g3_mesh, min_edge_len, max_edge_len, avg_edge_len);
+	// print_line(vformat("target edge len %.2f", avg_edge_len));
+	 r.SetTargetEdgeLength(avg_edge_len);
+	 r.SmoothSpeedT = 1.0f / iterations;
+	 r.Precompute();
+	 for (int k = 0; k < iterations; ++k) {
+	 	r.BasicRemeshPass();
+	 	print_line("remesh pass " + itos(k));
+	 }
+	// print_line("remesh done");
+	// RemoveFinTriangles(g3_mesh, true);
+	// std::cout << g3_mesh->MeshInfoString();
 	vertex_array.clear();
 	index_array.clear();
 	uv1_array.clear();
@@ -360,19 +361,19 @@ Array geometry3_process(Array p_mesh) {
 		new_norm.z = n_float.z();
 		normal_array.push_back(new_norm);
 
-		//::Vector<int> new_bones;
-		// VectoriDynamic bones_float = v.bones;
-		//for (int bone_i = 0; bone_i < bones_float.size(); bone_i++) {
-		//	new_bones.push_back(bones_float[bone_i]);
-		//}
-		//bones_array.append_array(new_bones);
+		// ::Vector<int> new_bones;
+		// // VectoriDynamic bones_float = v.bones;
+		// for (int bone_i = 0; bone_i < bones_float.size(); bone_i++) {
+		//   new_bones.push_back(bones_float[bone_i]);
+		// }
+		// bones_array.append_array(new_bones);
 
-		//::Vector<float> new_weights;
-		//VectorfDynamic weights_float = v.weights;
-		//for (int weight_i = 0; weight_i < weights_float.size(); weight_i++) {
-		//	new_weights.push_back(weights_float[weight_i]);
-		//}
-		//weights_array.append_array(new_weights);
+		// ::Vector<float> new_weights;
+		// VectorfDynamic weights_float = v.weights;
+		// for (int weight_i = 0; weight_i < weights_float.size(); weight_i++) {
+		//   new_weights.push_back(weights_float[weight_i]);
+		// }
+		// weights_array.append_array(new_weights);
 
 		::Vector2 new_uv1;
 		Vector2f uv_float = v.uv.cast<float>();
