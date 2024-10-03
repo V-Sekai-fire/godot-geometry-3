@@ -233,7 +233,6 @@ DCurve3Ptr ExtractLoopV(g3::DMesh3Ptr mesh, std::vector<int> vertices) {
 
 Array geometry3_process(Array p_mesh) {
 	g3::DMesh3Ptr g3_mesh = std::make_shared<DMesh3>();
-
 	::Vector<::Vector3> vertex_array = p_mesh[Mesh::ARRAY_VERTEX];
 	::Vector<::Vector3> normal_array = p_mesh[Mesh::ARRAY_NORMAL];
 	::Vector<::Color> color_array = p_mesh[Mesh::ARRAY_COLOR];
@@ -314,20 +313,18 @@ Array geometry3_process(Array p_mesh) {
 	// broke compactinplace
 	// g3_mesh->CompactInPlace();
 	g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
-	PreserveAllBoundaryEdges(cons, g3_mesh);
+	// PreserveAllBoundaryEdges(cons, g3_mesh);
 	//r.SetExternalConstraints(cons);
 	//r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
 	//PreserveBoundaryLoops(cons, g3_mesh);
 	// http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
-	int iterations = 2;
-	r.PreventNormalFlips = true;
-	double avg_edge_len = 0.5;
+	int iterations = 1;
+	//double avg_edge_len = 0.5;
 	// double min_edge_len = 0.0;
 	// double max_edge_len = 0.0;
 	// EdgeLengthStats(g3_mesh, min_edge_len, max_edge_len, avg_edge_len);
 	// print_line(vformat("target edge len %.2f", avg_edge_len));
-	 r.SetTargetEdgeLength(avg_edge_len);
-	 r.SmoothSpeedT = 1.0f / iterations;
+	//  r.SetTargetEdgeLength(avg_edge_len);
 	 r.Precompute();
 	 for (int k = 0; k < iterations; ++k) {
 	 	r.BasicRemeshPass();
