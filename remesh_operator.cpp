@@ -313,16 +313,14 @@ Array geometry3_process(Array p_mesh) {
 	Remesher r(g3_mesh);
 	// broke compactinplace
 	// g3_mesh->CompactInPlace();
-	// g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
-	// PreserveAllBoundaryEdges(cons, g3_mesh);
-	// r.SmoothType = Remesher::SmoothTypes::Uniform;
-	// r.SetExternalConstraints(cons);
-	// r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
-	// // PreserveBoundaryLoops(cons, g3_mesh);
-	// // http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
+	g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
+	PreserveAllBoundaryEdges(cons, g3_mesh);
+	//r.SetExternalConstraints(cons);
+	//r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
+	//PreserveBoundaryLoops(cons, g3_mesh);
+	// http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
 	int iterations = 2;
-	// r.EnableParallelSmooth = true; // TODO Implement parallel smooth 2021-06-29 FIRE
-	// r.PreventNormalFlips = true;
+	r.PreventNormalFlips = true;
 	double avg_edge_len = 0.5;
 	// double min_edge_len = 0.0;
 	// double max_edge_len = 0.0;
