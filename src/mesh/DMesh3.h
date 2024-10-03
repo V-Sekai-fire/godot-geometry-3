@@ -373,10 +373,12 @@ protected:
 			vertex_edges.Clear(vid);
 		vertex_edges.AllocateAt(vid);
 	}
+	
 	std::vector<int> vertex_edges_list(int vid) const {
 		std::vector<int> list;
-		for (int eid : vertex_edges.values(vid))
-			list.push_back(vid);
+		for (int eid : vertex_edges.values(vid)) {
+			list.push_back(eid);
+		}
 		return list;
 	}
 	// List<int> vertex_vertices_list(int vid)

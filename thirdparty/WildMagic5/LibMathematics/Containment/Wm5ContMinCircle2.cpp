@@ -1,4 +1,5 @@
 // Geometric Tools, LLC
+
 // Copyright (c) 1998-2014
 // Distributed under the Boost Software License, Version 1.0.
 // http://www.boost.org/LICENSE_1_0.txt
@@ -78,8 +79,8 @@ MinCircle2<Real>::MinCircle2 (int numPoints, const Vector2<Real>* points,
         //      ++i;
         //  }
         // This loop restarts from the beginning of the point list each time
-        // the circle needs updating.  Linus Källberg (Computer Science at
-        // Mälardalen University in Sweden) discovered that performance is
+        // the circle needs updating.  Linus KÃ¤llberg (Computer Science at
+        // MÃ¤lardalen University in Sweden) discovered that performance is
         // better when the remaining points in the array are processed before
         // restarting.  The points processed before the point that caused the
         // update are likely to be enclosed by the new circle (or near the

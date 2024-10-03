@@ -41,7 +41,7 @@ protected:
 	static void _bind_methods();
 
 public:
-	Ref<ArrayMesh> process(Ref<ArrayMesh> p_mesh);
+	Ref<Mesh> RemeshOperator::process(Ref<Mesh> p_mesh);
 	RemeshOperator() {}
 };
 

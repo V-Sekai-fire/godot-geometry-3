@@ -182,11 +182,11 @@ public:
 	IProjectionTargetPtr ProjectionTarget() {
 		return this->target;
 	}
-	void SetProjectionTarget(IProjectionTargetPtr target) {
-		this->target = target;
+	void SetProjectionTarget(IProjectionTargetPtr CurrTarget) {
+		this->target = CurrTarget;
 	}
-	void SetProjectionTarget(MeshProjectionTargetPtr target) {
-		this->target = std::dynamic_pointer_cast<IProjectionTarget>(target);
+	void SetProjectionTarget(MeshProjectionTargetPtr CurrTarget) {
+		this->target = std::dynamic_pointer_cast<IProjectionTarget>(CurrTarget);
 	}
 
 	/// <summary>

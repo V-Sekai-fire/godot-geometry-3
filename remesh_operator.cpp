@@ -124,48 +124,49 @@ DCurve3Ptr ExtractLoopV(g3::DMesh3Ptr mesh, std::vector<int> vertices) {
 	return curve;
 }
 
-// for all vertices in loopV, constrain to target
-// for all edges in loopV, disable flips and constrain to target
-static void ConstrainVtxLoopToMesh(MeshConstraintsPtr cons, DMesh3Ptr mesh,
-		std::list<int> loopV,
-		IProjectionTargetPtr target,
-		int setID = -1) {
-	VertexConstraint vc = VertexConstraint(target);
-	int N = loopV.size();
-	for (int i = 0; i < N; ++i) {
-		std::list<int>::iterator it = loopV.begin();
-		std::advance(it, i);
-		cons->SetOrUpdateVertexConstraint(*it, vc);
-	}
+//// for all vertices in loopV, constrain to target
+//// for all edges in loopV, disable flips and constrain to target
+//static void ConstrainVtxLoopToMesh(MeshConstraintsPtr cons, DMesh3Ptr mesh,
+//		std::list<int> loopV,
+//		IProjectionTargetPtr target,
+//		int setID = -1) {
+//	VertexConstraint vc = VertexConstraint(target);
+//	int N = loopV.size();
+//	for (int i = 0; i < N; ++i) {
+//		std::list<int>::iterator it = loopV.begin();
+//		std::advance(it, i);
+//		cons->SetOrUpdateVertexConstraint(*it, vc);
+//	}
+//
+//	EdgeConstraint ec = EdgeConstraint(EdgeRefineFlags::NoFlip, target);
+//	ec.TrackingSetID = setID;
+//	for (int i = 0; i < N; ++i) {
+//		std::list<int>::iterator it = loopV.begin();
+//		std::advance(it, i);
+//		int v0 = *it;
+//		it = loopV.begin();
+//		std::advance(it, (i + 1) % N);
+//		int v1 = *it;
+//
+//		int eid = mesh->FindEdge(v0, v1);
+//		if (eid == DMesh3::InvalidID) {
+//			return;
+//		}
+//		cons->SetOrUpdateEdgeConstraint(eid, ec);
+//	}
+//}
 
-	EdgeConstraint ec = EdgeConstraint(EdgeRefineFlags::NoFlip, target);
-	ec.TrackingSetID = setID;
-	for (int i = 0; i < N; ++i) {
-		std::list<int>::iterator it = loopV.begin();
-		std::advance(it, i);
-		int v0 = *it;
-		it = loopV.begin();
-		std::advance(it, (i + 1) % N);
-		int v1 = *it;
-
-		int eid = mesh->FindEdge(v0, v1);
-		if (eid == DMesh3::InvalidID) {
-			return;
-		}
-		cons->SetOrUpdateEdgeConstraint(eid, ec);
-	}
-}
-static void ConstrainVtxLoopTo(Remesher r, std::vector<int> loopV,
-		IProjectionTargetPtr target, int setID = -1) {
-	if (r.Constraints() == nullptr) {
-		r.SetExternalConstraints(std::make_shared<MeshConstraints>());
-	}
-	std::list<int> loop_list_verts;
-	for (int index : loopV) {
-		loop_list_verts.push_back(index);
-	}
-	ConstrainVtxLoopToMesh(r.Constraints(), r.Mesh(), loop_list_verts, target);
-}
+// static void ConstrainVtxLoopTo(Remesher r, std::vector<int> loopV,
+// 		IProjectionTargetPtr target, int setID = -1) {
+// 	if (r.Constraints() == nullptr) {
+// 		r.SetExternalConstraints(std::make_shared<MeshConstraints>());
+// 	}
+// 	std::list<int> loop_list_verts;
+// 	for (int index : loopV) {
+// 		loop_list_verts.push_back(index);
+// 	}
+// 	ConstrainVtxLoopToMesh(r.Constraints(), r.Mesh(), loop_list_verts, target);
+// }
 
 // https://github.com/gradientspace/geometry3Sharp/blob/master/mesh/MeshConstraintUtil.cs
 // void PreserveBoundaryLoops(g3::MeshConstraintsPtr cons, g3::DMesh3Ptr mesh) {
@@ -182,39 +183,39 @@ static void ConstrainVtxLoopTo(Remesher r, std::vector<int> loopV,
 //   }
 // }
 
-static void EdgeLengthStats(DMesh3Ptr mesh, double &minEdgeLen,
-		double &maxEdgeLen, double &avgEdgeLen,
-		int samples = 0) {
-	minEdgeLen = std::numeric_limits<double>::max();
-	maxEdgeLen = std::numeric_limits<double>::max();
-	avgEdgeLen = 0;
-	int avg_count = 0;
-	int MaxID = mesh->MaxEdgeID();
-
-	// if we are only taking some samples, use a prime-modulo-loop instead of
-	// random
-	int nPrime = (samples == 0) ? 1 : nPrime = 31337;
-	int max_count = (samples == 0) ? MaxID : samples;
-
-	Vector3d a, b;
-	int eid = 0;
-	int count = 0;
-	do {
-		if (mesh->IsEdge(eid)) {
-			mesh->GetEdgeV(eid, a, b);
-			double len = (b - a).norm();
-			if (len < minEdgeLen)
-				minEdgeLen = len;
-			if (len > maxEdgeLen)
-				maxEdgeLen = len;
-			avgEdgeLen += len;
-			avg_count++;
-		}
-		eid = (eid + nPrime) % MaxID;
-	} while (eid != 0 && count++ < max_count);
-
-	avgEdgeLen /= (double)avg_count;
-}
+//static void EdgeLengthStats(DMesh3Ptr mesh, double &minEdgeLen,
+//		double &maxEdgeLen, double &avgEdgeLen,
+//		int samples = 0) {
+//	minEdgeLen = std::numeric_limits<double>::max();
+//	maxEdgeLen = std::numeric_limits<double>::max();
+//	avgEdgeLen = 0;
+//	int avg_count = 0;
+//	int MaxID = mesh->MaxEdgeID();
+//
+//	// if we are only taking some samples, use a prime-modulo-loop instead of
+//	// random
+//	int nPrime = (samples == 0) ? 1 : nPrime = 31337;
+//	int max_count = (samples == 0) ? MaxID : samples;
+//
+//	Vector3d a, b;
+//	int eid = 0;
+//	int count = 0;
+//	do {
+//		if (mesh->IsEdge(eid)) {
+//			mesh->GetEdgeV(eid, a, b);
+//			double len = (b - a).norm();
+//			if (len < minEdgeLen)
+//				minEdgeLen = len;
+//			if (len > maxEdgeLen)
+//				maxEdgeLen = len;
+//			avgEdgeLen += len;
+//			avg_count++;
+//		}
+//		eid = (eid + nPrime) % MaxID;
+//	} while (eid != 0 && count++ < max_count);
+//
+//	avgEdgeLen /= (double)avg_count;
+//}
 
 // https://github.com/gradientspace/geometry3Sharp/blob/master/mesh/MeshConstraintUtil.cs
 // void preserve_group_region_border_loops(DMesh3Ptr mesh) {
@@ -231,7 +232,6 @@ static void EdgeLengthStats(DMesh3Ptr mesh, double &minEdgeLen,
 // }
 
 Array geometry3_process(Array p_mesh) {
-	uint32_t ticks = OS::get_singleton()->get_ticks_msec();
 	g3::DMesh3Ptr g3_mesh = std::make_shared<DMesh3>();
 
 	::Vector<::Vector3> vertex_array = p_mesh[Mesh::ARRAY_VERTEX];
@@ -313,31 +313,30 @@ Array geometry3_process(Array p_mesh) {
 	Remesher r(g3_mesh);
 	// broke compactinplace
 	// g3_mesh->CompactInPlace();
-	// g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
-	// PreserveAllBoundaryEdges(cons, g3_mesh);
-	// r.SmoothType = Remesher::SmoothTypes::Uniform;
-	// r.SetExternalConstraints(cons);
-	// r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
-	// // PreserveBoundaryLoops(cons, g3_mesh);
-	// // http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
-	// int iterations = 2;
-	// r.EnableParallelSmooth = true; // TODO Implement parallel smooth 2021-06-29 FIRE
-	// r.PreventNormalFlips = true;
-	// double avg_edge_len = 0.0;
-	// double min_edge_len = 0.0;
-	// double max_edge_len = 0.0;
-	// EdgeLengthStats(g3_mesh, min_edge_len, max_edge_len, avg_edge_len);
-	// print_line(vformat("target edge len %.2f", avg_edge_len));
-	// r.SetTargetEdgeLength(avg_edge_len);
-	// r.SmoothSpeedT = 1.0f / iterations;
-	// r.Precompute();
-	// for (int k = 0; k < iterations; ++k) {
-	// 	r.BasicRemeshPass();
-	// 	print_line("remesh pass " + itos(k));
-	// }
-	// print_line("remesh done");
-	// RemoveFinTriangles(g3_mesh, true);
-	// std::cout << g3_mesh->MeshInfoString();
+	g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
+	PreserveAllBoundaryEdges(cons, g3_mesh);
+	r.SmoothType = Remesher::SmoothTypes::Uniform;
+	r.SetExternalConstraints(cons);
+	r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
+	// PreserveBoundaryLoops(cons, g3_mesh);
+	// http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
+	int iterations = 2;
+	r.PreventNormalFlips = true;
+	double avg_edge_len = 0.01;
+	//double min_edge_len = 0.0;
+	//double max_edge_len = 0.0;
+	//EdgeLengthStats(g3_mesh, min_edge_len, max_edge_len, avg_edge_len);
+	print_line(vformat("target edge len %.2f", avg_edge_len));
+	r.SetTargetEdgeLength(avg_edge_len);
+	r.SmoothSpeedT = 1.0f / iterations;
+	r.Precompute();
+	for (int k = 0; k < iterations; ++k) {
+		r.BasicRemeshPass();
+		print_line("remesh pass " + itos(k));
+	}
+	print_line("remesh done");
+	RemoveFinTriangles(g3_mesh, true);
+	std::cout << g3_mesh->MeshInfoString();
 	vertex_array.clear();
 	index_array.clear();
 	uv1_array.clear();
@@ -361,19 +360,19 @@ Array geometry3_process(Array p_mesh) {
 		new_norm.z = n_float.z();
 		normal_array.push_back(new_norm);
 
-		// ::Vector<int> new_bones;
-		// // VectoriDynamic bones_float = v.bones;
-		// for (int bone_i = 0; bone_i < bones_float.size(); bone_i++) {
-		//   new_bones.push_back(bones_float[bone_i]);
-		// }
-		// bones_array.append_array(new_bones);
+		//::Vector<int> new_bones;
+		// VectoriDynamic bones_float = v.bones;
+		//for (int bone_i = 0; bone_i < bones_float.size(); bone_i++) {
+		//	new_bones.push_back(bones_float[bone_i]);
+		//}
+		//bones_array.append_array(new_bones);
 
-		// ::Vector<float> new_weights;
-		// VectorfDynamic weights_float = v.weights;
-		// for (int weight_i = 0; weight_i < weights_float.size(); weight_i++) {
-		//   new_weights.push_back(weights_float[weight_i]);
-		// }
-		// weights_array.append_array(new_weights);
+		//::Vector<float> new_weights;
+		//VectorfDynamic weights_float = v.weights;
+		//for (int weight_i = 0; weight_i < weights_float.size(); weight_i++) {
+		//	new_weights.push_back(weights_float[weight_i]);
+		//}
+		//weights_array.append_array(new_weights);
 
 		::Vector2 new_uv1;
 		Vector2f uv_float = v.uv.cast<float>();
@@ -401,18 +400,16 @@ Array geometry3_process(Array p_mesh) {
 	if (color_array.size()) {
 		mesh[Mesh::ARRAY_COLOR] = color_array;
 	}
-	print_line(vformat("remesh took %.2fs",
-			(OS::get_singleton()->get_ticks_msec() - ticks) / 1000.0f));
 	return mesh;
 }
 
 } // namespace g3
 
-Ref<ArrayMesh> RemeshOperator::process(Ref<ArrayMesh> p_mesh) {
-	Ref<ArrayMesh> array_mesh = memnew(ArrayMesh);
+Ref<Mesh> RemeshOperator::process(Ref<Mesh> p_mesh) {
 	if (p_mesh.is_null()) {
-		return array_mesh; // Return an empty ArrayMesh if input is invalid
+		return Ref<Mesh>(); // Return an empty ArrayMesh if input is invalid
 	}
+	Ref<ArrayMesh> array_mesh = memnew(ArrayMesh);
 	int surface_count = p_mesh->get_surface_count();
 	for (int i = 0; i < surface_count; ++i) {
 		Array surface_arrays = p_mesh->surface_get_arrays(i);

@@ -105,17 +105,17 @@ public:
 			Edges.push_back(edge);
 		}
 
-		std::vector<int> Vertices;
-		Vertices.resize(Edges.size());
+		std::vector<int> CurrentVertices;
+		CurrentVertices.resize(Edges.size());
 		Index2i start_ev = mesh->GetEdgeV(Edges[0]);
 		Index2i prev_ev = start_ev;
 		for (int i = 1; i < Edges.size(); ++i) {
 			Index2i next_ev = mesh->GetEdgeV(Edges[i % Edges.size()]);
-			Vertices[i] = find_shared_edge_v(prev_ev, next_ev);
+			CurrentVertices[i] = find_shared_edge_v(prev_ev, next_ev);
 			prev_ev = next_ev;
 		}
-		Vertices[0] = find_edge_other_v(start_ev, Vertices[1]);
-		return std::make_shared<EdgeLoop>(mesh, Vertices, Edges);
+		CurrentVertices[0] = find_edge_other_v(start_ev, CurrentVertices[1]);
+		return std::make_shared<EdgeLoop>(mesh, CurrentVertices, Edges);
 	}
 
 	/// <summary>
@@ -123,21 +123,21 @@ public:
 	/// </summary>
 	EdgeLoopPtr FromVertices(DMesh3Ptr mesh, std::list<int> vertices) {
 		int NV = vertices.size();
-		std::vector<int> Vertices;
-		Vertices.clear();
-		for (int vertex : vertices) {
-			Vertices.push_back(vertex);
+		std::vector<int> CurrentVertices;
+		CurrentVertices.clear();
+		for (int vertex : CurrentVertices) {
+			CurrentVertices.push_back(vertex);
 		}
 		int NE = NV;
-		std::vector<int> Edges;
-		Edges.resize(NE);
+		std::vector<int> CurrentEdges;
+		CurrentEdges.resize(NE);
 		for (int i = 0; i < NE; ++i) {
-			Edges[i] = mesh->FindEdge(Vertices[i], Vertices[(i + 1) % NE]);
-			if (Edges[i] == DMesh3::InvalidID) {
+			CurrentEdges[i] = mesh->FindEdge(CurrentVertices[i], CurrentVertices[(i + 1) % NE]);
+			if (CurrentEdges[i] == DMesh3::InvalidID) {
 				throw std::logic_error("EdgeLoop.FromVertices: vertices are not connected by edge!");
 			}
 		}
-		return std::make_shared<EdgeLoop>(mesh, Vertices, Edges);
+		return std::make_shared<EdgeLoop>(mesh, CurrentVertices, CurrentEdges);
 	}
 
 	/// <summary>
@@ -145,33 +145,33 @@ public:
 	/// if loop is a boundary edge, we can correct orientation if requested
 	/// </summary>
 	EdgeLoopPtr FromVertices(DMesh3Ptr mesh, std::list<int> vertices, bool bAutoOrient = true) {
-		std::vector<int> Vertices;
-		for (int vertex : vertices) {
-			Vertices.push_back(vertex);
+		std::vector<int> CurrentVertices;
+		for (int vertex : CurrentVertices) {
+			CurrentVertices.push_back(vertex);
 		}
 
 		if (bAutoOrient) {
-			int a = Vertices[0], b = Vertices[1];
+			int a = CurrentVertices[0], b = CurrentVertices[1];
 			int eid = mesh->FindEdge(a, b);
 			if (mesh->IsBoundaryEdge(eid)) {
 				Index2i ev = mesh->GetOrientedBoundaryEdgeV(eid);
 				if (ev.x() == b && ev.y() == a) {
-					std::reverse(Vertices.begin(), Vertices.end());
+					std::reverse(CurrentVertices.begin(), CurrentVertices.end());
 				}
 			}
 		}
 
-		std::vector<int> Edges;
-		Edges.resize(Vertices.size());
-		for (int i = 0; i < Edges.size(); ++i) {
-			int a = Vertices[i], b = Vertices[(i + 1) % Vertices.size()];
-			Edges[i] = mesh->FindEdge(a, b);
-			if (Edges[i] == DMesh3::InvalidID) {
+		std::vector<int> CurrentEdges;
+		CurrentEdges.resize(CurrentVertices.size());
+		for (int i = 0; i < CurrentEdges.size(); ++i) {
+			int a = CurrentVertices[i], b = CurrentVertices[(i + 1) % CurrentVertices.size()];
+			CurrentEdges[i] = mesh->FindEdge(a, b);
+			if (CurrentEdges[i] == DMesh3::InvalidID) {
 				throw std::logic_error("EdgeLoop.FromVertices: invalid edge [" + std::to_string(a) + ',' + std::to_string(b) + ']');
 			}
 		}
 
-		return std::make_shared<EdgeLoop>(mesh, Vertices, Edges);
+		return std::make_shared<EdgeLoop>(mesh, CurrentVertices, CurrentEdges);
 	}
 
 	int VertexCount() {

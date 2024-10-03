@@ -69,12 +69,6 @@ void g3_devAssert(bool b) {
 	;
 }
 
-void g3_debugPrint(std::string fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	g3_debugPrint(fmt.c_str(), args);
-	va_end(args);
-}
 void g3_debugPrint(const char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
@@ -89,12 +83,6 @@ void g3_debugPrint(const char *fmt, ...) {
 #endif
 }
 
-void g3_debugPrint(std::wstring fmt, ...) {
-	va_list args;
-	va_start(args, fmt);
-	g3_debugPrint(fmt.c_str(), args);
-	va_end(args);
-}
 void g3_debugPrint(const wchar_t *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);

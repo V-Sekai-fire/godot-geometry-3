@@ -97,7 +97,7 @@ public:
 					VertexID c = vNewV[vTriEdges[k][(j + 2) % 3]];
 					if (c != InvalidID && mesh.FindEdge(o, c)) {
 						DMesh3::EdgeFlipInfo info;
-						auto eResult = mesh.FlipEdge(o, c, info);
+						mesh.FlipEdge(o, c, info);
 					}
 				}
 			}
