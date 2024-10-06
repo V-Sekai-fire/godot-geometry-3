@@ -183,6 +183,40 @@ DCurve3Ptr ExtractLoopV(g3::DMesh3Ptr mesh, std::vector<int> vertices) {
 //   }
 // }
 
+//static void EdgeLengthStats(DMesh3Ptr mesh, double &minEdgeLen,
+//		double &maxEdgeLen, double &avgEdgeLen,
+//		int samples = 0) {
+//	minEdgeLen = std::numeric_limits<double>::max();
+//	maxEdgeLen = std::numeric_limits<double>::max();
+//	avgEdgeLen = 0;
+//	int avg_count = 0;
+//	int MaxID = mesh->MaxEdgeID();
+//
+//	// if we are only taking some samples, use a prime-modulo-loop instead of
+//	// random
+//	int nPrime = (samples == 0) ? 1 : nPrime = 31337;
+//	int max_count = (samples == 0) ? MaxID : samples;
+//
+//	Vector3d a, b;
+//	int eid = 0;
+//	int count = 0;
+//	do {
+//		if (mesh->IsEdge(eid)) {
+//			mesh->GetEdgeV(eid, a, b);
+//			double len = (b - a).norm();
+//			if (len < minEdgeLen)
+//				minEdgeLen = len;
+//			if (len > maxEdgeLen)
+//				maxEdgeLen = len;
+//			avgEdgeLen += len;
+//			avg_count++;
+//		}
+//		eid = (eid + nPrime) % MaxID;
+//	} while (eid != 0 && count++ < max_count);
+//
+//	avgEdgeLen /= (double)avg_count;
+//}
+
 // https://github.com/gradientspace/geometry3Sharp/blob/master/mesh/MeshConstraintUtil.cs
 // void preserve_group_region_border_loops(DMesh3Ptr mesh) {
 //   int set_id = 1;
@@ -206,7 +240,7 @@ Array geometry3_process(Array p_mesh) {
 	::Vector<int32_t> bones_array = p_mesh[Mesh::ARRAY_BONES];
 	::Vector<float> weights_array = p_mesh[Mesh::ARRAY_WEIGHTS];
 	if (normal_array.size()) {
-		g3_mesh->EnableVertexNormals(Vector3f(0.0, 1.0, 0.0));
+		g3_mesh->EnableVertexNormals(Vector3f(0.0, 0.0, 1.0));
 	}
 	if (color_array.size()) {
 		g3_mesh->EnableVertexColors(Vector3f(1.0, 1.0, 1.0));
@@ -276,21 +310,35 @@ Array geometry3_process(Array p_mesh) {
 		g3_mesh->AppendTriangle(new_tri);
 	}
 	Remesher r(g3_mesh);
-	MeshConstraintUtil.FixAllBoundaryEdges(r); // Leaves fins.
-	r.SetTargetEdgeLength(0.75);
-	r.SmoothSpeedT = 0.5;
-	int iterations = 20;
-	r.Precompute();
-	for (int k = 0; k < iterations; ++k) {
-		r.BasicRemeshPass();
-		print_line("remesh pass " + itos(k));
-	}
-	print_line("remesh done");
+	// broke compactinplace
+	// g3_mesh->CompactInPlace();
+	g3::MeshConstraintsPtr cons = std::make_shared<MeshConstraints>();
+	// PreserveAllBoundaryEdges(cons, g3_mesh);
+	//r.SetExternalConstraints(cons);
+	//r.SetProjectionTarget(MeshProjectionTarget::AutoPtr(g3_mesh, true));
+	//PreserveBoundaryLoops(cons, g3_mesh);
+	// http://www.gradientspace.com/tutorials/2018/7/5/remeshing-and-constraints
+	int iterations = 1;
+	//double avg_edge_len = 0.5;
+	// double min_edge_len = 0.0;
+	// double max_edge_len = 0.0;
+	// EdgeLengthStats(g3_mesh, min_edge_len, max_edge_len, avg_edge_len);
+	// print_line(vformat("target edge len %.2f", avg_edge_len));
+	//  r.SetTargetEdgeLength(avg_edge_len);
+	 r.Precompute();
+	 for (int k = 0; k < iterations; ++k) {
+	 	r.BasicRemeshPass();
+	 	print_line("remesh pass " + itos(k));
+	 }
+	// print_line("remesh done");
+	// RemoveFinTriangles(g3_mesh, true);
+	// std::cout << g3_mesh->MeshInfoString();
 	vertex_array.clear();
 	index_array.clear();
 	uv1_array.clear();
 	normal_array.clear();
 	color_array.clear();
+
 	for (int32_t vertex_i = 0; vertex_i < g3_mesh->MaxVertexID(); vertex_i++) {
 		NewVertexInfo v = g3_mesh->GetVertexAll(vertex_i);
 
